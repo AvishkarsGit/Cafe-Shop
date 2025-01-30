@@ -1,7 +1,26 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const dbConnect = async () => {
-  await mongoose.connect(process.env.MONGO_URL);
-};
+mongoose.connect('mongodb+srv://shrvanji98600:Project2024@eventclustor.xmzfc.mongodb.net/cafe_shop?retryWrites=true&w=majority&appName=EventClustor').then(()=>{
+  console.log("Data base is connected")
+}).catch((error)=>{
+  console.log("Error:",error)
+})
 
-module.exports = dbConnect;
+const productModel = mongoose.Schema({
+  ProductName:{
+    type:String,
+    required:true
+  },
+  ProductPrice:{
+    type:String,
+    required:true
+  },
+  Description:{
+    type:String
+  },
+  imgUrl:{
+    type:String
+  }
+});
+
+module.exports = mongoose.model("product",productModel);
