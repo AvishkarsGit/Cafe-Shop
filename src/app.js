@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
-const dbConnect = require("./database/db.connect");
+const DB = require("./database/db.connect");
+const Redis = require("./utils/Redis");
 const app = express();
 
 // config dotenv
@@ -10,7 +11,7 @@ dotenv.config();
 const port = process.env.PORT || 4000;
 
 // connect database
-dbConnect()
+DB.dbConnect()
   .then((res) => {
     app.listen(port, () => {
       console.log(`Server is listening on port ${port}`);
@@ -20,3 +21,20 @@ dbConnect()
   .catch((err) => {
     console.log(err);
   });
+
+// connect to redis
+Redis.connectToRedis()
+  .then(() => {
+    console.log("connected to redis");
+  })
+  .catch((err) => {
+    console.log("redis client error ", err);
+  });
+
+// DB.test()
+//   .then(() => {
+//     console.log();
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
