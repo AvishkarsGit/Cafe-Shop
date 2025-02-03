@@ -34,3 +34,13 @@ app.get('/delete/:id',async(req,res)=>{
   res.redirect('/read')
 })
 
+app.get('/edit/:id',async(req,res)=>{
+  const product = await productData.findOne({_id:req.params.id});
+  res.render('edit',{product})
+})
+
+app.post('/update/:id',async(req,res)=>{
+  let{ProductName,ProductPrice,Description,imgUrl}= req.body;
+  const product = await productData.findOneAndUpdate({_id:req.params.id},{ProductName,ProductPrice,Description,imgUrl},{new:true});
+  res.redirect('/read');
+})
