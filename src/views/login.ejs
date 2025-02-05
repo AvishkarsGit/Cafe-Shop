@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+  </head>
+  <body>
+    <form action="/auth/login" method="post">
+      <input
+        type="email"
+        placeholder="enter email"
+        name="email"
+        required
+        value="<%= data.email || '' %>"
+        id="email"
+      />
+      <% if (error && error.email) { %>
+      <p style="color: red"><%= error.email %></p>
+      <% } %>
+      <br /><br />
+      <input
+        type="password"
+        placeholder="enter password"
+        name="password"
+        required
+        value="<%= data.password || '' %>"
+        id="password"
+      />
+      <% if (error && error.password) { %>
+      <p style="color: red"><%= error.password %></p>
+      <% } %>
+
+      <br /><br />
+      <button>Login</button>
+    </form>
+  </body>
+</html>

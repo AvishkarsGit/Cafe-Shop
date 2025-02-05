@@ -3,7 +3,11 @@ require("dotenv").config();
 
 class Redis {
   static client = createClient({
-    url:'redis://'+process.env.REDIS_SERVER_HOST+':'+process.env.REDIS_SERVER_PORT,
+    url:
+      "redis://" +
+      process.env.REDIS_SERVER_HOST +
+      ":" +
+      process.env.REDIS_SERVER_PORT,
     username: process.env.redis_username,
     password: process.env.redis_password,
     // socket: {
@@ -17,22 +21,40 @@ class Redis {
   }
 
   static async setValue(key, value, expires_at) {
-    let options;
-    if (expires_at) {
-      options = {
-        EX: expires_at,
-      };
+    try {
+      let options;
+      if (expires_at) {
+        options = {
+          EX: expires_at,
+        };
+      }
+      await this.client.set(key, value, options);
+      return;
+    } catch (error) {
+      console.log(error);
+      throw "server not connected! please try again...";
     }
-    await this.client.set(key, value, options);
   }
 
   static async getVal(key) {
-    const value = await this.client.get(key);
-    return value;
+    try {
+      const value = await this.client.get(key);
+      return value;
+    } catch (error) {
+      console.log(error);
+
+      throw "server not connected! please try again..";
+    }
   }
 
   static async delKey(key) {
-    await this.client.del(key);
+    try {
+      await this.client.del(key);
+    } catch (error) {
+      console.log(error);
+
+      throw "server not connected! please try again..";
+    }
   }
 }
 

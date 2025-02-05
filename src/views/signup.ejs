@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signup</title>
+  </head>
+  <body>
+    <h2>Signup</h2>
+    <form action="/auth/register" method="post">
+      <input
+        type="text"
+        placeholder="enter name"
+        name="name"
+        required
+        value="<%= data.name || '' %>"
+      />
+      <% if (error && error.name) { %>
+      <p style="color: red"><%= error.name %></p>
+      <% } %>
+
+      <br /><br />
+      <input
+        type="email"
+        placeholder="enter email"
+        name="email"
+        required
+        value="<%= data.email || '' %>"
+      />
+      <% if (error && error.email) { %>
+      <p style="color: red"><%= error.email %></p>
+      <% } %>
+      <br /><br />
+      <input
+        type="password"
+        placeholder="enter password"
+        name="password"
+        required
+        value="<%= data.password || '' %>"
+      />
+      <% if (error && error.password) { %>
+      <p style="color: red"><%= error.password %></p>
+      <% } %>
+      <br /><br />
+      <input
+        type="text"
+        placeholder="re-type password"
+        name="confirmPassword"
+        required
+        value="<%= data.confirmPassword || '' %>"
+      />
+      <% if (error && error.confirmPassword) { %>
+      <p style="color: red"><%= error.confirmPassword %></p>
+      <% } %>
+      <br /><br />
+      <input
+        type="text"
+        placeholder="enter phone number"
+        required
+        name="phone"
+        value="<%= data.phone || '' %>"
+      />
+      <% if (error && error.phone) { %>
+      <p style="color: red"><%= error.phone %></p>
+      <% } %>
+      <br /><br />
+      <button>Create Account</button>
+    </form>
+  </body>
+</html>
