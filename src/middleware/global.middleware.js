@@ -5,12 +5,10 @@ require("dotenv").config();
 class GlobalMiddleware {
   static isLoggedIn = async (req, res, next) => {
     const accessToken = req.cookies.accessToken;
-    console.log("accessToken = ", accessToken);
 
     try {
       // check if access token is available in the cookie
       if (!accessToken) {
-        
         return res.status(401).json({ message: "Unauthorized" });
       }
 
