@@ -1,20 +1,21 @@
 const express = require("express");
-const dotenv = require("dotenv");
-const DB = require("./database/db.connect");
-const Redis = require("./utils/Redis");
+require("dotenv").config();
+const DB = require("./database/db.connect.js");
+const Redis = require("./utils/Redis.js");
 const path = require("path");
-const app = express();
 const cookieParser = require("cookie-parser");
+const session = require("express-session");
+const flash = require("connect-flash");
 
-// config dotenv
-dotenv.config();
+const app = express();
 
 // port
 const port = process.env.PORT || 4000;
 
 // import router
-const userRouter = require("./routes/auth.routes");
-const homeRouter = require("./routes/home.routes");
+const userRouter = require("./routes/auth.routes.js");
+const homeRouter = require("./routes/home.routes.js");
+const ExpressError = require("./utils/ExpressError.js");
 
 // config important
 app.use(express.json());
@@ -23,6 +24,16 @@ app.set("views", path.join(__dirname, "/views"));
 app.set("view engine", "ejs");
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "/public")));
+
+// session options
+const sessionOptions = {
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+};
+
+app.use(session(sessionOptions));
+app.use(flash());
 
 // connect database
 DB.dbConnect()
@@ -44,6 +55,11 @@ Redis.connectToRedis()
   .catch((err) => {
     console.log("redis client error ", err);
   });
+
+app.use((req, res, next) => {
+  res.locals.msg = req.flash("message");
+  next();
+});
 
 // routes
 app.use("/auth", userRouter);

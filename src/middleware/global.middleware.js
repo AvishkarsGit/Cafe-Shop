@@ -1,5 +1,5 @@
-const { User } = require("../models/user.model");
-const JWT = require("../utils/jwt");
+const User = require("../models/user.model.js");
+const JWT = require("../utils/jwt.js");
 require("dotenv").config();
 
 class GlobalMiddleware {
@@ -9,18 +9,19 @@ class GlobalMiddleware {
     try {
       // check if access token is available in the cookie
       if (!accessToken) {
-        return res.status(401).json({ message: "Unauthorized" });
+        throw new Error("You session is expired");
       }
 
       const decoded = await JWT.jwtVerify(
         accessToken,
         process.env.JWT_ACCESS_SECRETE
       );
-      req.user = decoded;
 
+      req.user = decoded;
       next();
     } catch (error) {
-      return res.status(401).json({ message: "Token Expired!", expired: true });
+      req.flash("message", error.message);
+      res.redirect("/auth/login");
     }
   };
 
@@ -45,6 +46,7 @@ class GlobalMiddleware {
       res.status(403).json({
         message:
           "Your session is expired or invalid user!.. Please login again",
+        expired: true,
       });
     }
   };

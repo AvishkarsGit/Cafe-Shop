@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 require("dotenv").config();
+
 class JWT {
   static encryptPassword = async (password) => {
     return await bcrypt.hash(password, 10);
@@ -55,7 +56,6 @@ class JWT {
       });
     });
   };
-
 }
 
 module.exports = JWT;

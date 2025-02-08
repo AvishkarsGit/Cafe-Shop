@@ -1,7 +1,8 @@
-const { User } = require("../models/user.model");
-const JWT = require("../utils/jwt");
-const NodeMailer = require("../utils/NodeMailer");
+const User = require("../models/user.model.js");
+const JWT = require("../utils/jwt.js");
+const NodeMailer = require("../utils/NodeMailer.js");
 require("dotenv").config();
+
 const Redis = require("../utils/Redis.js");
 
 class UserController {
@@ -12,66 +13,74 @@ class UserController {
   static postRegister = async (req, res) => {
     let { name, email, password, phone } = req.body;
 
-    // 1) check if user is already exists
-    const user = await User.findOne({ email });
+    try {
+      // 1) check if user is already exists
+      const user = await User.findOne({ email });
 
-    if (user) {
-      throw new Error("user already exists");
+      if (user) {
+        throw new Error("user already exists");
+      }
+
+      // 2) encrypt password
+      const hashedPassword = await JWT.encryptPassword(password);
+      let verification_token = JWT.generateOTP();
+
+      const data = {
+        name,
+        email,
+        password: hashedPassword,
+        phone,
+        verification_token,
+        verification_token_time: Date.now() + JWT.MAX_TOKEN_TIME,
+        email_verified: false,
+      };
+
+      const newUser = await new User(data).save();
+      //payload
+      const accessToken = JWT.generateAccessToken(
+        { _id: newUser.id },
+        process.env.JWT_ACCESS_EXPIRES
+      );
+      const refreshToken = JWT.generateRefreshToken(
+        { _id: newUser.id },
+        process.env.JWT_REFRESH_EXPIRES
+      );
+
+      //cookie options
+
+      res.cookie("accessToken", accessToken, {
+        httpOnly: true,
+        sameSite: "strict",
+        secure: true,
+        maxAge: 30 * 1000, //30 seconds for a testing
+      });
+
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        sameSite: "strict",
+        secure: true,
+        maxAge: 60 * 60 * 1000, //1 hour
+      });
+
+      //user registered successfully
+
+      // send verification email
+      const doctype_html = `<h4>Hi ${name},your email verification otp : ${verification_token}`;
+
+      await NodeMailer.sendingMail(email, "Email Verification", doctype_html);
+
+      res.redirect("/auth/verify");
+    } catch (error) {
+      req.flash("message", error.message);
+      return res.redirect("/auth/register");
     }
-
-    // 2) encrypt password
-    const hashedPassword = await JWT.encryptPassword(password);
-    let verification_token = JWT.generateOTP();
-
-    const data = {
-      name,
-      email,
-      password: hashedPassword,
-      phone,
-      verification_token,
-      verification_token_time: Date.now() + JWT.MAX_TOKEN_TIME,
-      email_verified: false,
-    };
-
-    const newUser = await new User(data).save();
-    //payload
-    const accessToken = JWT.generateAccessToken(
-      { _id: newUser.id },
-      process.env.JWT_ACCESS_EXPIRES
-    );
-    const refreshToken = JWT.generateRefreshToken(
-      { _id: newUser.id },
-      process.env.JWT_REFRESH_EXPIRES
-    );
-
-    //cookie options
-
-    res.cookie("accessToken", accessToken, {
-      httpOnly: true,
-      sameSite: "strict",
-      secure: true,
-      maxAge: 30 * 1000, //30 seconds for a testing
-    });
-
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      sameSite: "strict",
-      secure: true,
-      maxAge: 60 * 60 * 1000, //1 hour
-    });
-
-    //user registered successfully
-
-    // send verification email
-    const doctype_html = `<h4>Hi ${name},your email verification otp : ${verification_token}`;
-
-    await NodeMailer.sendingMail(email, "Email Verification", doctype_html);
-
-    res.redirect("/auth/verify");
   };
 
   static getLogin = (req, res) => {
-    res.render("login.ejs", { error: null, data: {} });
+    res.render("login.ejs", {
+      error: null,
+      data: {},
+    });
   };
 
   static getHome = (req, res) => {
@@ -93,24 +102,30 @@ class UserController {
 
       // 1)check if entered otp is correct or expired
       if (!user) {
-        console.log("entered OTP is invalid or may be expired");
-        return res.redirect("/auth/verify");
+        throw new Error("Entered otp is wrong or expired");
       }
 
       // All are good, then update into database
-      await User.findByIdAndUpdate(
+      const updatedUser = await User.findByIdAndUpdate(
         {
           _id: user.id,
         },
-
+        {
+          $set: {
+            email_verified: true,
+          },
+        },
         {
           new: true,
         }
       );
+      console.log(updatedUser);
 
-      res.redirect("/");
+      req.flash("success", "Registration Successfully... ");
+      return res.redirect("/");
     } catch (error) {
-      console.log(error);
+      req.flash("message", error.message);
+      return res.redirect("/auth/verify");
     }
   };
 
@@ -150,7 +165,7 @@ class UserController {
     try {
       // 1) check user is present with that email
       const user = await User.findOne({ email });
-      
+
       if (!user) {
         return res.status(409).json({
           message: "User doesn't  exists",
@@ -178,19 +193,18 @@ class UserController {
         maxAge: 30 * 1000,
       });
 
-      // res.redirect("/");
-      return res.status(200).json({
-        message: "Logged in successfully...",
-      });
+      req.flash("message", "Logged in successfully");
+      return res.redirect("/");
     } catch (error) {
-      return res.status(400).json({
-        error: error.message,
-      });
+      
+      req.flash("message", error.message);
+      return res.redirect("/auth/login");
     }
   };
 
   static getNewToken = (req, res, next) => {
     const decoded_data = req.user;
+    console.log(decoded_data);
 
     try {
       if (decoded_data) {
@@ -201,19 +215,21 @@ class UserController {
         const accessToken = JWT.generateAccessToken(payload, "60s"); //60 seconds for the testing
         const refreshToken = JWT.generateRefreshToken(payload, "1h"); //1hour for the testing
 
+        console.log("accessToken = ", accessToken);
+        console.log("refreshToken = ", refreshToken);
+
         res.cookie("accessToken", accessToken, {
           httpOnly: true,
           secure: true,
-          sameSite: "strict",
           maxAge: 60 * 1000,
         });
 
         res.cookie("refreshToken", refreshToken, {
           httpOnly: true,
           secure: true,
-          sameSite: "strict",
           maxAge: 60 * 60 * 1000,
         });
+        console.log(res.getHeaders());
       } else {
         throw new Error("access is forbidden");
       }
@@ -223,7 +239,6 @@ class UserController {
       });
     }
   };
-  
 }
 
 module.exports = UserController;

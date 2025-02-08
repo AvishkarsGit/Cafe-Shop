@@ -1,5 +1,4 @@
-const Schema = require("../schema");
-
+const Schema = require("../schema.js");
 class AuthValidator {
   static validateSignup = (req, res, next) => {
     const { error, value } = Schema.userSchema.validate(req.body, {

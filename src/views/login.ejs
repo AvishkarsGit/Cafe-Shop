@@ -4,14 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
   <body>
-    <form
-      action="/auth/login"
-      method="post"
-      id="login-form"
-    >
+    <h1>Login</h1>
+    <!-- success -->
+    <% if (msg && msg.length) { %>
+    <p><%= msg %></p>
+    <% } %>
+
+    <form action="/auth/login" method="post">
       <input
         type="email"
         placeholder="enter email"
@@ -40,6 +41,5 @@
       <button>Login</button>
     </form>
 
-    <script src="/js/Login.js"></script>
   </body>
 </html>

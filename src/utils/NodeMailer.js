@@ -1,5 +1,7 @@
 const nodemailer = require("nodemailer");
+
 require("dotenv").config();
+
 class NodeMailer {
   static initiateTransport = () => {
     return nodemailer.createTransport({

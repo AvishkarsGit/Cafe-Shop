@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Redis = require("../utils/Redis");
+const Redis = require("../utils/Redis.js");
 
 class DB {
   static dbConnect = async () => {

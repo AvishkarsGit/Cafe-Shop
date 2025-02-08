@@ -1,7 +1,7 @@
 const express = require("express");
-const UserController = require("../controller/user.controller");
-const AuthValidator = require("../validator/auth.validator");
-const GlobalMiddleware = require("../middleware/global.middleware");
+const UserController = require("../controller/user.controller.js");
+const AuthValidator = require("../validator/auth.validator.js");
+const GlobalMiddleware = require("../middleware/global.middleware.js");
 const router = express.Router();
 
 router
@@ -22,6 +22,6 @@ router
 
 router
   .route("/refresh-token")
-  .get(GlobalMiddleware.decodeRefreshToken, UserController.getNewToken);
+  .post(GlobalMiddleware.decodeRefreshToken, UserController.getNewToken);
 
 module.exports = router;
