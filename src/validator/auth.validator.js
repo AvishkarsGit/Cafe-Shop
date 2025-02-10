@@ -10,7 +10,7 @@ class AuthValidator {
       error.details.forEach((err) => {
         errorMsg[err.context.key] = err.message;
       });
-      return res.render("signup.ejs", { error: errorMsg, data: req.body });
+      return res.status(400).json({ success: false, message: errorMsg });
     }
     next();
   };
@@ -27,6 +27,24 @@ class AuthValidator {
       });
       return res.render("login.ejs", { error: errorMsg, data: req.body });
     }
+    next();
+  };
+
+  static validateResetPasswordEmail = (req, res, next) => {
+    const { error, value } = Schema.resetPasswordSchema.validate(req.body, {
+      abortEarly: false,
+    });
+
+    if (error) {
+      let errorMsg = {};
+      error.details.forEach((err) => {
+        errorMsg[err.context.key] = err.message;
+      });
+      return res.status(400).json({ success: false, message: errorMsg });
+    }
+
+    console.log(value);
+
     next();
   };
 }

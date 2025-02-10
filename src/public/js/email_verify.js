@@ -1,21 +1,28 @@
-document.querySelector("#resendbtn").addEventListener("click", (e) => {
-  e.preventDefault();
+document
+  .getElementById("verification-form")
+  .addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const otp = document.getElementById("verification_token").value;
 
-alert("Please wait!.... while we send the email.");
-  fetch("/auth/verify", { method: "PATCH" })
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.success) {
-        alert("Email has been send successfully");
-      } else {
-        alert("email sending fail!!");
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-      alert("An error occurred while sending the email.");
-    })
-    .finally(() => {
-      window.location.reload();
-    });
+    try {
+      const response = await axios.post("/auth/verify", {
+        verification_token: otp,
+      });
+
+      alert(response.data.message);
+
+      location.replace("/");
+    } catch (error) {
+      alert(error.response?.data?.message || "Verification failed");
+    }
+  });
+
+document.getElementById("resendbtn").addEventListener("click", async () => {
+  try {
+    const response = await axios.patch("/auth/verify");
+
+    alert(response.data.message);
+  } catch (error) {
+    alert(error.response?.data?.message || "Failed to resend OTP");
+  }
 });

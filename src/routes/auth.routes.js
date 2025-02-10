@@ -21,7 +21,11 @@ router
   .post(AuthValidator.validateLogin, UserController.login);
 
 router
-  .route("/refresh-token")
-  .post(GlobalMiddleware.decodeRefreshToken, UserController.getNewToken);
+  .route("/logout")
+  .post(GlobalMiddleware.isLoggedIn, UserController.logout);
+
+router
+  .route("/forgot-password")
+  .get(AuthValidator.validateResetPasswordEmail,UserController.getForgotPassword);
 
 module.exports = router;

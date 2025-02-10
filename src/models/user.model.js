@@ -33,6 +33,14 @@ const userSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
+    reset_password_verification_token: {
+      type: String,
+      required: true,
+    },
+    reset_password_verification_token_time: {
+      type: Date,
+      required: true,
+    },
     email_verified: {
       type: Boolean,
       required: true,

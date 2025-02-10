@@ -21,27 +21,26 @@ class JWT {
     });
   };
 
-  static generateRefreshToken = (payload, expires) => {
-    return jwt.sign(payload, process.env.JWT_REFRESH_SECRETE, {
-      expiresIn: expires,
-    });
-  };
-
   static MAX_TOKEN_TIME = 60 * 1000;
 
-  static jwtVerify = (accessToken, secret) => {
+  static jwtVerifyAccessToken = (token) => {
     return new Promise((resolve, reject) => {
-      jwt.verify(accessToken, secret, function (err, decoded) {
-        if (err) {
-          reject(err);
-        } else if (!decoded) {
-          reject("user is not authorized");
-        } else {
-          resolve(decoded);
+      jwt.verify(
+        token,
+        process.env.JWT_ACCESS_SECRETE,
+        function (err, decoded) {
+          if (err) {
+            reject(err);
+          } else if (!decoded) {
+            reject("user is not authorized");
+          } else {
+            resolve(decoded);
+          }
         }
-      });
+      );
     });
   };
+  
 
   static comparePassword = async (password, encryptedPassword) => {
     return new Promise((resolve, reject) => {

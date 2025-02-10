@@ -6,6 +6,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const flash = require("connect-flash");
+const cors = require("cors");
 
 const app = express();
 
@@ -15,15 +16,21 @@ const port = process.env.PORT || 4000;
 // import router
 const userRouter = require("./routes/auth.routes.js");
 const homeRouter = require("./routes/home.routes.js");
-const ExpressError = require("./utils/ExpressError.js");
 
 // config important
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 app.set("views", path.join(__dirname, "/views"));
 app.set("view engine", "ejs");
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "/public")));
+
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 
 // session options
 const sessionOptions = {
@@ -57,7 +64,8 @@ Redis.connectToRedis()
   });
 
 app.use((req, res, next) => {
-  res.locals.msg = req.flash("message");
+  res.locals.error = req.flash("error");
+  res.locals.success = req.flash("success");
   next();
 });
 

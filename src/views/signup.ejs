@@ -4,27 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Signup</title>
+    <!-- axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
   <body>
     <h2>Signup</h2>
 
-    <% if (msg && msg.length) { %>
-    <!--  -->
-    <%= msg %>
-    <!--  -->
-    <% } %>
+    
 
-    <form action="/auth/register" method="post">
+    <form action="/auth/register" method="post" id="signup-form">
       <input
         type="text"
         placeholder="enter name"
         name="name"
         required
-        value="<%= data.name || '' %>"
+        id="name"
       />
-      <% if (error && error.name) { %>
-      <p style="color: red"><%= error.name %></p>
-      <% } %>
 
       <br /><br />
       <input
@@ -32,46 +27,93 @@
         placeholder="enter email"
         name="email"
         required
-        value="<%= data.email || '' %>"
+        id="email"
       />
-      <% if (error && error.email) { %>
-      <p style="color: red"><%= error.email %></p>
-      <% } %>
+
       <br /><br />
       <input
         type="password"
         placeholder="enter password"
         name="password"
         required
-        value="<%= data.password || '' %>"
+        id="password"
       />
-      <% if (error && error.password) { %>
-      <p style="color: red"><%= error.password %></p>
-      <% } %>
+
       <br /><br />
+
       <input
         type="text"
         placeholder="re-type password"
         name="confirmPassword"
         required
-        value="<%= data.confirmPassword || '' %>"
+        id="confirmPassword"
       />
-      <% if (error && error.confirmPassword) { %>
-      <p style="color: red"><%= error.confirmPassword %></p>
-      <% } %>
+
       <br /><br />
       <input
         type="text"
         placeholder="enter phone number"
         required
         name="phone"
-        value="<%= data.phone || '' %>"
+        id="phone"
       />
-      <% if (error && error.phone) { %>
-      <p style="color: red"><%= error.phone %></p>
-      <% } %>
+
       <br /><br />
       <button>Create Account</button>
     </form>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("signup-form");
+
+        if (!form) {
+          console.error("Form not found! Check if the ID is correct.");
+          return;
+        }
+
+        form.addEventListener("submit", async function (event) {
+          event.preventDefault(); // Prevent default form submission
+
+          // Ensure form is correctly referenced
+          const formData = new FormData(form); // Correct way to create FormData
+
+          const userData = {
+            name: formData.get("name"),
+            email: formData.get("email"),
+            password: formData.get("password"),
+            confirmPassword: formData.get("confirmPassword"),
+            phone: formData.get("phone"),
+          };
+
+          alert("Please wait..."); //ui part
+
+          try {
+            const response = await axios.post("/auth/register", userData, {
+              withCredentials: true,
+              headers: { "Content-Type": "application/json" },
+            });
+
+            if (response.data.success) {
+              alert(response.data.message);
+              setTimeout(() => {
+                location.replace("/auth/verify");
+              }, 2000);
+            }
+          } catch (error) {
+            if (error.response && error.response.data.message) {
+              const errors = error.response.data.message;
+              let errorMessage = "";
+              Object.keys(errors).forEach((key) => {
+                errorMessage += `${errors[key]}\n`;
+              });
+
+              alert(errorMessage);
+            } else {
+              alert("Registration failed");
+            }
+          }
+        });
+      });
+    </script>
   </body>
 </html>

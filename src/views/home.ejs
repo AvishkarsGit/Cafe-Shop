@@ -8,9 +8,30 @@
   </head>
   <body>
     <!-- home  -->
-    <h1>home</h1>
-    <% if (msg && msg.length) { %> <%= msg %> <% } %>
 
-    <script></script>
+    <button id="logout-btn">Logout</button>
   </body>
+
+  <script>
+    document
+      .getElementById("logout-btn")
+      .addEventListener("click", async (e) => {
+        try {
+          const response = await axios.post(
+            "/auth/logout",
+            {},
+            { withCredentials: true }
+          );
+
+          if (response.data.success) {
+            alert(response.data.message);
+            location.replace("/auth/login");
+          }
+        } catch (error) {
+          if (error.response) {
+            alert(error.response.data.message);
+          }
+        }
+      });
+  </script>
 </html>

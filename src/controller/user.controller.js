@@ -7,7 +7,7 @@ const Redis = require("../utils/Redis.js");
 
 class UserController {
   static getRegister = (req, res) => {
-    res.render("signup.ejs", { error: null, data: {} });
+    res.render("signup.ejs");
   };
 
   static postRegister = async (req, res) => {
@@ -36,30 +36,20 @@ class UserController {
       };
 
       const newUser = await new User(data).save();
+
       //payload
       const accessToken = JWT.generateAccessToken(
         { _id: newUser.id },
         process.env.JWT_ACCESS_EXPIRES
-      );
-      const refreshToken = JWT.generateRefreshToken(
-        { _id: newUser.id },
-        process.env.JWT_REFRESH_EXPIRES
       );
 
       //cookie options
 
       res.cookie("accessToken", accessToken, {
         httpOnly: true,
-        sameSite: "strict",
         secure: true,
-        maxAge: 30 * 1000, //30 seconds for a testing
-      });
-
-      res.cookie("refreshToken", refreshToken, {
-        httpOnly: true,
         sameSite: "strict",
-        secure: true,
-        maxAge: 60 * 60 * 1000, //1 hour
+        maxAge: parseInt(process.env.JWT_ACCESS_COOKIE_EXPIRES),
       });
 
       //user registered successfully
@@ -69,18 +59,21 @@ class UserController {
 
       await NodeMailer.sendingMail(email, "Email Verification", doctype_html);
 
-      res.redirect("/auth/verify");
+      return res.status(200).json({
+        success: true,
+        message:
+          "Your account create successfully,, please check your mail to verify",
+      });
     } catch (error) {
-      req.flash("message", error.message);
-      return res.redirect("/auth/register");
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
     }
   };
 
   static getLogin = (req, res) => {
-    res.render("login.ejs", {
-      error: null,
-      data: {},
-    });
+    res.render("login", { message: req.flash() });
   };
 
   static getHome = (req, res) => {
@@ -119,19 +112,26 @@ class UserController {
           new: true,
         }
       );
-      console.log(updatedUser);
 
-      req.flash("success", "Registration Successfully... ");
-      return res.redirect("/");
+      return res.status(200).json({
+        success: true,
+        message: "Your email has been verified",
+      });
     } catch (error) {
-      req.flash("message", error.message);
-      return res.redirect("/auth/verify");
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
     }
   };
 
   static resendEmail = async (req, res) => {
     const id = req.user._id;
+
     let user = await User.findById({ _id: id });
+
+    console.log(user);
+
     const email = user.email;
     const verification_token = JWT.generateOTP();
 
@@ -144,18 +144,26 @@ class UserController {
           updatedAt: new Date(),
           verification_token,
           verification_token_time: Date.now() + JWT.MAX_TOKEN_TIME,
+        },
+        {
+          new: true,
         }
       );
 
       if (newUser) {
-        res.json({
-          success: true,
-        });
         const doctype_html = `<h4>Hi ${user.name},your resend email verification otp : ${verification_token}`;
         await NodeMailer.sendingMail(email, "Email Verification", doctype_html);
+
+        return res.json({
+          success: true,
+          message: "Email has been sent successfully",
+        });
       }
     } catch (error) {
-      console.log(error);
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
     }
   };
 
@@ -184,60 +192,47 @@ class UserController {
         process.env.JWT_ACCESS_EXPIRES
       );
 
-      // 4) set to the cookie
-      res.cookie("accessToken", accessToken, {
-        httpOnly: true,
-        sameSite: "strict",
-        secure: true,
-        // maxAge: 60 * 60 * 1000,
-        maxAge: 30 * 1000,
-      });
-
-      req.flash("message", "Logged in successfully");
-      return res.redirect("/");
-    } catch (error) {
-      
-      req.flash("message", error.message);
-      return res.redirect("/auth/login");
-    }
-  };
-
-  static getNewToken = (req, res, next) => {
-    const decoded_data = req.user;
-    console.log(decoded_data);
-
-    try {
-      if (decoded_data) {
-        const payload = {
-          _id: decoded_data._id,
-        };
-
-        const accessToken = JWT.generateAccessToken(payload, "60s"); //60 seconds for the testing
-        const refreshToken = JWT.generateRefreshToken(payload, "1h"); //1hour for the testing
-
-        console.log("accessToken = ", accessToken);
-        console.log("refreshToken = ", refreshToken);
-
-        res.cookie("accessToken", accessToken, {
+      return res
+        .status(200)
+        .cookie("accessToken", accessToken, {
           httpOnly: true,
           secure: true,
-          maxAge: 60 * 1000,
-        });
+          sameSite: "strict",
 
-        res.cookie("refreshToken", refreshToken, {
-          httpOnly: true,
-          secure: true,
-          maxAge: 60 * 60 * 1000,
+          maxAge: parseInt(process.env.JWT_ACCESS_COOKIE_EXPIRES),
+        })
+        .json({
+          success: true,
+          message: "Logged in successfully",
         });
-        console.log(res.getHeaders());
-      } else {
-        throw new Error("access is forbidden");
-      }
     } catch (error) {
-      res.status(403).json({
+      return res.status(400).json({
+        success: false,
         message: error.message,
       });
     }
+  };
+
+  static logout = async (req, res) => {
+    const decoded_data = req.user;
+    try {
+      if (decoded_data) {
+        res.clearCookie("accessToken");
+        return res.status(200).json({
+          success: true,
+          message: "You have logged out",
+        });
+      }
+    } catch (error) {
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  };
+
+  static getForgotPassword = (req, res) => {
+    res.render("reset_password.ejs", { email: req.email });
   };
 }
 

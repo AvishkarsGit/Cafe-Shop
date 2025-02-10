@@ -4,21 +4,25 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Verify Email</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
   <body>
     <h3>Verify Email using OTP</h3>
 
-    <% if (msg && msg.length) { %> <%= msg %> <% } %>
-    <form action="/auth/verify" method="post">
+    <% if (error) { %>
+    <p style="color: red"><%= error %></p>
+    <% } %>
+    <form action="/auth/verify" method="post" id="verification-form">
       <input
         type="text"
         name="verification_token"
         placeholder="Enter OTP"
         required
+        id="verification_token"
       />
       <button>Verify</button>
 
-      <a href="/auth/verify" id="resendbtn">Resend OTP</a>
+      <button id="resendbtn">Resend OTP</button>
     </form>
 
     <script src="/js/email_verify.js"></script>
