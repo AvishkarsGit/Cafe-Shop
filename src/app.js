@@ -7,15 +7,13 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const flash = require("connect-flash");
 const cors = require("cors");
-
 const app = express();
-
-// port
-const port = process.env.PORT || 4000;
 
 // import router
 const userRouter = require("./routes/auth.routes.js");
 const homeRouter = require("./routes/home.routes.js");
+const productRouter = require("./routes/product.routes.js");
+
 
 // config important
 app.use(express.json());
@@ -71,4 +69,5 @@ app.use((req, res, next) => {
 
 // routes
 app.use("/auth", userRouter);
+app.use("/product", productRouter);
 app.use("/", homeRouter);
