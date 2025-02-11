@@ -8,7 +8,7 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const cors = require("cors");
 const app = express();
-
+const PORT = 4000;
 
 //config port
 const port = process.env.PORT || 4000;
@@ -17,7 +17,6 @@ const port = process.env.PORT || 4000;
 const userRouter = require("./routes/auth.routes.js");
 const homeRouter = require("./routes/home.routes.js");
 const productRouter = require("./routes/product.routes.js");
-
 
 // config important
 app.use(express.json());
@@ -55,6 +54,8 @@ DB.dbConnect()
   .catch((err) => {
     console.log(err);
   });
+
+
 
 // connect to redis
 Redis.connectToRedis()
