@@ -1,74 +1,46 @@
-const express = require("express");
-require("dotenv").config();
-const DB = require("./database/db.connect.js");
-const Redis = require("./utils/Redis.js");
-const path = require("path");
-const cookieParser = require("cookie-parser");
-const session = require("express-session");
-const flash = require("connect-flash");
-const cors = require("cors");
-
+const express = require('express');
+const productData = require('./database/db.connect')
 const app = express();
+const PORT = 4000
 
-// port
-const port = process.env.PORT || 4000;
+app.set("view engine","ejs");
+app.use(express.json())
+app.use(express.urlencoded({extended:true}))
 
-// import router
-const userRouter = require("./routes/auth.routes.js");
-const homeRouter = require("./routes/home.routes.js");
+app.listen(PORT,()=>console.log(`Server is Started on ${PORT}`))
 
-// config important
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
-app.set("views", path.join(__dirname, "/views"));
-app.set("view engine", "ejs");
-app.use(express.static(path.join(__dirname, "/public")));
+app.get('/',(req,res)=>{
+  res.render('index')
+})
 
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-    credentials: true,
+app.post('/create',async(req,res)=>{
+  const {ProductName,ProductPrice,Description,imgUrl}=req.body;
+  const product = await productData.create({
+    ProductName,
+    ProductPrice,
+    Description,
+    imgUrl
   })
-);
+  res.redirect('read');
+})
 
-// session options
-const sessionOptions = {
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: true,
-};
+app.get("/read",async(req,res)=>{
+      let cafeproduct = await productData.find();
+      res.render('read',{cafeproduct})
+})
 
-app.use(session(sessionOptions));
-app.use(flash());
+app.get('/delete/:id',async(req,res)=>{
+  const products =await productData.findByIdAndDelete({_id:req.params.id});
+  res.redirect('/read')
+})
 
-// connect database
-DB.dbConnect()
-  .then((res) => {
-    app.listen(port, () => {
-      console.log(`http://localhost:${port}/`);
-      console.log(`Database connected`);
-    });
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+app.get('/edit/:id',async(req,res)=>{
+  const product = await productData.findOne({_id:req.params.id});
+  res.render('edit',{product})
+})
 
-// connect to redis
-Redis.connectToRedis()
-  .then(() => {
-    console.log("connected to redis");
-  })
-  .catch((err) => {
-    console.log("redis client error ", err);
-  });
-
-app.use((req, res, next) => {
-  res.locals.error = req.flash("error");
-  res.locals.success = req.flash("success");
-  next();
-});
-
-// routes
-app.use("/auth", userRouter);
-app.use("/", homeRouter);
+app.post('/update/:id',async(req,res)=>{
+  let{ProductName,ProductPrice,Description,imgUrl}= req.body;
+  const product = await productData.findOneAndUpdate({_id:req.params.id},{ProductName,ProductPrice,Description,imgUrl},{new:true});
+  res.redirect('/read');
+})
