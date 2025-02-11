@@ -46,7 +46,7 @@ app.use(flash());
 DB.dbConnect()
   .then((res) => {
     app.listen(port, () => {
-      console.log(`Server is listening on port ${port}`);
+      console.log(`http://localhost:${port}/`);
       console.log(`Database connected`);
     });
   })

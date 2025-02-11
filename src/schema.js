@@ -19,5 +19,8 @@ class Schema {
   static resetPasswordSchema = Joi.object({
     email: Joi.string().trim().email().required(),
   }).required();
+
+  
+
 }
 module.exports = Schema;

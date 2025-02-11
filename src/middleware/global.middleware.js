@@ -44,6 +44,37 @@ class GlobalMiddleware {
       return res.redirect("/auth/verify");
     }
   };
+  static isEmailNotVerified = async (req, res, next) => {
+    try {
+      const id = req.user._id;
+
+      const user = await User.findById({ _id: id });
+
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      if (user.email_verified) {
+        return res.redirect("/");
+      }
+
+      req.user = user;
+
+      next();
+    } catch (error) {
+      req.flash("error", error.message);
+      return res.redirect("/auth/verify");
+    }
+  };
+
+  static isLoggedOut = async (req, res, next) => {
+    const accessToken = req.cookies.accessToken;
+
+    if (accessToken) {
+      return res.redirect("/");
+    }
+    next();
+  };
 }
 
 module.exports = GlobalMiddleware;

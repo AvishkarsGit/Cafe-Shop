@@ -130,8 +130,6 @@ class UserController {
 
     let user = await User.findById({ _id: id });
 
-    console.log(user);
-
     const email = user.email;
     const verification_token = JWT.generateOTP();
 
@@ -231,8 +229,110 @@ class UserController {
     }
   };
 
-  static getForgotPassword = (req, res) => {
-    res.render("reset_password.ejs", { email: req.email });
+  static getForgotPassword = async (req, res) => {
+    const email = req.query.email;
+
+    const response = await this.sendResetPasswordToken(email);
+
+    res.render("verify_reset_password_otp.ejs", { email, response });
+  };
+
+  static sendResetPasswordToken = async (email) => {
+    //generate the otp
+    const otp = JWT.generateOTP();
+    try {
+      const user = await User.findOneAndUpdate(
+        { email },
+        {
+          updatedAt: new Date(),
+          reset_password_verification_token: otp,
+          reset_password_verification_token_time:
+            Date.now() + JWT.MAX_TOKEN_TIME,
+        },
+        {
+          new: true,
+        }
+      );
+
+      if (!user) {
+        throw new Error("failed to send email");
+      }
+
+      //send to the email
+      await NodeMailer.sendingMail(
+        email,
+        "Reset password verification mail",
+        `<h3>Your OneTimePassword for Reset password : ${otp}</h3>`
+      );
+
+      return "OTP has been sent successfully to your email";
+    } catch (error) {
+      return error.message;
+    }
+  };
+
+  static verifyResetPasswordToken = async (req, res) => {
+    const { reset_password_verification_token } = req.body;
+
+    try {
+      const user = await User.findOne({
+        reset_password_verification_token,
+        reset_password_verification_token_time: { $gt: Date.now() },
+      });
+
+      if (!user) {
+        throw new Error("verification token is invalid or may be expired");
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: "Otp verified successfully",
+        email: user.email,
+      });
+    } catch (error) {
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  };
+
+  static getResetPassword = (req, res) => {
+    res.render("reset_password.ejs", { email: req.query.email });
+  };
+
+  static resetPassword = async (req, res) => {
+    const { password, email } = req.body;
+    console.log(email);
+    try {
+      const hashed = await JWT.encryptPassword(password);
+      const user = await User.findOneAndUpdate(
+        {
+          email,
+        },
+        {
+          password: hashed,
+          updatedAt: Date.now(),
+        },
+        {
+          new: true,
+        }
+      );
+
+      if (!user) {
+        throw new Error("failed to update password");
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: "Password is updated successfully",
+      });
+    } catch (error) {
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
   };
 }
 

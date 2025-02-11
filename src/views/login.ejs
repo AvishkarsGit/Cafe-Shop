@@ -40,14 +40,14 @@
 
       <br />
       <br />
-      <a href="/auth/forgot-password" id="forgot-btn"
-        >Forgot Password</a
-      >
+      <a href="/auth/forgot-password" id="forgot-btn">Forgot Password</a>
     </form>
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         const loginForm = document.getElementById("login-form");
+        const forgotBtn = document.getElementById("forgot-btn");
+
         if (!loginForm) {
           console.log("Form not found");
           return;
@@ -91,6 +91,22 @@
             }
           }
         });
+
+        forgotBtn.addEventListener("click", async (e) => {
+          e.preventDefault();
+
+          let email = document.getElementById("email").value;
+
+          if (!email) {
+            alert("please provide email to set new password");
+            return;
+          }
+
+          location.replace(
+            `/auth/forgot-password?email=${encodeURIComponent(email)}`
+          );
+        });
+        
       });
     </script>
   </body>

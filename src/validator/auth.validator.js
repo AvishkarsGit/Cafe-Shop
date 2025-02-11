@@ -42,9 +42,6 @@ class AuthValidator {
       });
       return res.status(400).json({ success: false, message: errorMsg });
     }
-
-    console.log(value);
-
     next();
   };
 }

@@ -11,13 +11,17 @@ router
 
 router
   .route("/verify")
-  .get(GlobalMiddleware.isLoggedIn, UserController.getVerificationScreen)
+  .get(
+    GlobalMiddleware.isLoggedIn,
+    GlobalMiddleware.isEmailNotVerified,
+    UserController.getVerificationScreen
+  )
   .post(GlobalMiddleware.isLoggedIn, UserController.verifyEmail)
   .patch(GlobalMiddleware.isLoggedIn, UserController.resendEmail);
 
 router
   .route("/login")
-  .get(UserController.getLogin)
+  .get(GlobalMiddleware.isLoggedOut, UserController.getLogin)
   .post(AuthValidator.validateLogin, UserController.login);
 
 router
@@ -26,6 +30,16 @@ router
 
 router
   .route("/forgot-password")
-  .get(AuthValidator.validateResetPasswordEmail,UserController.getForgotPassword);
+  .get(GlobalMiddleware.isLoggedOut, UserController.getForgotPassword);
+router
+  .route("/reset/password/verify")
+  .post(GlobalMiddleware.isLoggedOut, UserController.verifyResetPasswordToken);
+
+router
+  .route("/reset/password")
+  .get(GlobalMiddleware.isLoggedOut, UserController.getResetPassword)
+  .post(UserController.resetPassword);
+
+ 
 
 module.exports = router;
