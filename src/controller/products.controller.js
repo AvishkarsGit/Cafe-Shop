@@ -1,3 +1,4 @@
+const productData = require("../models/products.model.js");
 class ProductController {
   static getHome = (req, res) => {
     res.render("index");
