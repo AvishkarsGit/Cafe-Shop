@@ -12,7 +12,7 @@ class ProductController {
       Description,
       imgUrl,
     });
-    res.redirect("/product/read");
+    res.redirect("/products/read");
   };
 
   static getAllProducts = async (req, res) => {
@@ -24,7 +24,7 @@ class ProductController {
     const products = await productData.findByIdAndDelete({
       _id: req.params.id,
     });
-    res.redirect("/product/read");
+    res.redirect("/products/read");
   };
 
   static editProduct = async (req, res) => {
@@ -39,7 +39,7 @@ class ProductController {
       { ProductName, ProductPrice, Description, imgUrl },
       { new: true }
     );
-    res.redirect("/product/read");
+    res.redirect("/products/read");
   };
 }
 

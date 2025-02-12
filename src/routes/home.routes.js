@@ -4,13 +4,11 @@ const GlobalMiddleware = require("../middleware/global.middleware.js");
 const router = express.Router();
 
 router
-  .route("/")
+  .route("/home")
   .get(
     GlobalMiddleware.isLoggedIn,
     GlobalMiddleware.isEmailVerified,
     UserController.getHome
   );
-
-
 
 module.exports = router;

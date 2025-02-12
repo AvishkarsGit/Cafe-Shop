@@ -9,6 +9,10 @@
   <body>
     <!-- home  -->
 
+    <% if (error) { %>
+    <p style="color: red"><%= error %></p>
+    <% } %>
+
     <button id="logout-btn">Logout</button>
   </body>
 

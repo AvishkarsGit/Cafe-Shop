@@ -11,7 +11,7 @@ document
 
       alert(response.data.message);
 
-      location.replace("/");
+      location.replace("/home");
     } catch (error) {
       alert(error.response?.data?.message || "Verification failed");
     }

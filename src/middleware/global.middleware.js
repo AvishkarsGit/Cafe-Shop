@@ -55,7 +55,7 @@ class GlobalMiddleware {
       }
 
       if (user.email_verified) {
-        return res.redirect("/");
+        return res.redirect("/home");
       }
 
       req.user = user;
@@ -71,7 +71,17 @@ class GlobalMiddleware {
     const accessToken = req.cookies.accessToken;
 
     if (accessToken) {
-      return res.redirect("/");
+      return res.redirect("/home");
+    }
+    next();
+  };
+
+  static isAdmin = async (req, res, next) => {
+    const id = req.user._id;
+    const user = await User.findById({ _id: id });
+    if (user.type !== "admin") {
+      req.flash("error", "You are not an admin");
+      return res.redirect("/home");
     }
     next();
   };

@@ -47,15 +47,13 @@ app.use(flash());
 DB.dbConnect()
   .then((res) => {
     app.listen(port, () => {
-      console.log(`http://localhost:${port}/`);
+      console.log(`http://localhost:${port}/home`);
       console.log(`Database connected`);
     });
   })
   .catch((err) => {
     console.log(err);
   });
-
-
 
 // connect to redis
 Redis.connectToRedis()

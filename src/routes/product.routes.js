@@ -1,6 +1,13 @@
 const express = require("express");
 const ProductController = require("../controller/products.controller");
+const GlobalMiddleware = require("../middleware/global.middleware");
 const router = express.Router();
+
+router.use(
+  GlobalMiddleware.isLoggedIn,
+  GlobalMiddleware.isEmailVerified,
+  GlobalMiddleware.isAdmin
+);
 
 router.route("/").get(ProductController.getHome);
 router.route("/create").post(ProductController.addProduct);
