@@ -1,0 +1,28 @@
+@import url("https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap");
+
+:root {
+  --color-primary: #fc3254;
+  --color-danger: #e12232;
+  --color-danger-tint: #ffd3d6;
+  --color-success: #128c45;
+  --color-success-tint: #c2f1d6;
+  --color-btn-hover: #8c2637;
+  --color-black-third: #292929;
+  --color-nav-bg: #444444;
+  --color-light: #f2f2f2;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Urbanist", serif;
+  text-decoration: none;
+  list-style: none;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: 20rem 1fr;
+}

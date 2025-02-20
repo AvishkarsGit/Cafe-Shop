@@ -1,7 +1,7 @@
 const productData = require("../models/products.model.js");
 class ProductController {
   static getHome = (req, res) => {
-    res.render("index");
+    res.render("products/index");
   };
 
   static addProduct = async (req, res) => {
@@ -17,7 +17,7 @@ class ProductController {
 
   static getAllProducts = async (req, res) => {
     let cafeproduct = await productData.find();
-    res.render("read", { cafeproduct });
+    res.render("products/read", { cafeproduct });
   };
 
   static deleteProduct = async (req, res) => {
@@ -29,7 +29,7 @@ class ProductController {
 
   static editProduct = async (req, res) => {
     const product = await productData.findOne({ _id: req.params.id });
-    res.render("edit", { product });
+    res.render("products/edit", { product });
   };
 
   static updateProduct = async (req, res) => {

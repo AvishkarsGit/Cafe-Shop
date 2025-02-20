@@ -30,16 +30,15 @@ router
 
 router
   .route("/forgot-password")
-  .get(GlobalMiddleware.isLoggedOut, UserController.getForgotPassword);
-router
-  .route("/reset/password/verify")
-  .post(GlobalMiddleware.isLoggedOut, UserController.verifyResetPasswordToken);
+  .get(GlobalMiddleware.isLoggedIn, UserController.getForgotPassword);
 
 router
   .route("/reset/password")
   .get(GlobalMiddleware.isLoggedOut, UserController.getResetPassword)
   .post(UserController.resetPassword);
 
- 
+router
+  .route("/send/reset/password/token")
+  .post(UserController.sendResetPasswordToken);
 
 module.exports = router;

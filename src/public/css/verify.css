@@ -1,0 +1,62 @@
+.verification-form {
+  margin: 8rem auto;
+}
+#verify {
+  outline: none;
+  border: none;
+  background-color: var(--color-primary);
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 1.2px;
+  padding: 5px 15px;
+  text-transform: uppercase;
+  display: none;
+}
+#verify:hover {
+  cursor: pointer;
+  background-color: var(--color-success);
+}
+.resend-btn {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+#resendbtn {
+  padding: 6px 14px;
+  background-color: var(--color-primary);
+  color: white;
+  text-transform: uppercase;
+  outline: none;
+  border: none;
+  font-weight: 550;
+  letter-spacing: 1.4px;
+  display: none;
+}
+#sendBtn {
+  padding: 6px 14px;
+  background-color: var(--color-primary);
+  color: white;
+  text-transform: uppercase;
+  outline: none;
+  border: none;
+  font-weight: 550;
+  letter-spacing: 1.4px;
+}
+#sendBtn:hover {
+  cursor: pointer;
+  background-color: var(--color-black-third);
+}
+
+#resendbtn:hover {
+  cursor: pointer;
+  background-color: var(--color-black-third);
+}
+
+#resend-in {
+  color: blue;
+  font-weight: 550;
+  letter-spacing: 1.2px;
+  display: none;
+}
+

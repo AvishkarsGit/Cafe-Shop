@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jagadamb Cafe-Shop</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- box-icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css"
+    />
+
+    <!-- remix icon -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+
+    <!-- css -->
+    <link rel="stylesheet" href="/css/index.css" />
+    <link rel="stylesheet" href="/css/navbar.css" />
+    <link rel="stylesheet" href="/css/login.css" />
+    <link rel="stylesheet" href="/css/signup.css" />
+    <link rel="stylesheet" href="/css/home.css" />
+    <link rel="stylesheet" href="/css/dashboard.css" />
+    <link rel="stylesheet" href="/css/reset_password.css" />
+    <link rel="stylesheet" href="/css/new_password_set.css" />
+    <link rel="stylesheet" href="/css/verify.css" />
+  </head>
+  <body>
+    <!-- header -->
+
+    <%- include("../includes/navbar.ejs") %>
+
+    <!-- main -->
+    <div class="container">
+      <%- include("../includes/dashboard.ejs") %> 
+      <%- body %>
+    </div>
+
+    <!-- footer -->
+    <%- include("../includes/footer.ejs") %>
+
+    <!-- sweet alert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- script -->
+    <script src="/js/navbar.js"></script>
+
+    <script src="/js/index.js"></script>
+  </body>
+</html>

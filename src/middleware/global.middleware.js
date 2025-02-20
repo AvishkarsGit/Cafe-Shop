@@ -15,6 +15,10 @@ class GlobalMiddleware {
 
       req.user = decoded;
 
+      const user = await User.findOne({ _id: decoded._id });
+
+      res.locals.currUser = user;
+
       next();
     } catch (error) {
       req.flash("error", error.message);
@@ -84,6 +88,31 @@ class GlobalMiddleware {
       return res.redirect("/home");
     }
     next();
+  };
+
+  static isUserExist = async (req, res, next) => {
+    const id = req.user._id;
+    try {
+      const user = await User.findById({ _id: id });
+
+      //1) check if user exits
+
+      if (!user) {
+        //2) check if user not exists, but cookie are still exist in the browser
+
+        const accessToken = req.cookies.accessToken;
+        if (accessToken) {
+          res.clearCookie("accessToken");
+        }
+        throw new Error("User doesn't exists ");
+      }
+
+      req.user = user._id;
+      next();
+    } catch (error) {
+      req.flash("error", error.message);
+      return res.redirect("/auth/login");
+    }
   };
 }
 

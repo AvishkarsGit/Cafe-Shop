@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const flash = require("connect-flash");
 const cors = require("cors");
+const engine = require("ejs-mate");
 const app = express();
 const PORT = 4000;
 
@@ -17,12 +18,14 @@ const port = process.env.PORT || 4000;
 const userRouter = require("./routes/auth.routes.js");
 const homeRouter = require("./routes/home.routes.js");
 const productRouter = require("./routes/product.routes.js");
+const GlobalMiddleware = require("./middleware/global.middleware.js");
 
 // config important
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.set("views", path.join(__dirname, "/views"));
+app.engine("ejs", engine);
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "/public")));
 
@@ -55,18 +58,10 @@ DB.dbConnect()
     console.log(err);
   });
 
-// connect to redis
-Redis.connectToRedis()
-  .then(() => {
-    console.log("connected to redis");
-  })
-  .catch((err) => {
-    console.log("redis client error ", err);
-  });
-
 app.use((req, res, next) => {
   res.locals.error = req.flash("error");
   res.locals.success = req.flash("success");
+  res.locals.currUser = req.session.currUser || null;
   next();
 });
 
