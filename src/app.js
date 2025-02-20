@@ -55,14 +55,7 @@ DB.dbConnect()
     console.log(err);
   });
 
-// connect to redis
-Redis.connectToRedis()
-  .then(() => {
-    console.log("connected to redis");
-  })
-  .catch((err) => {
-    console.log("redis client error ", err);
-  });
+
 
 app.use((req, res, next) => {
   res.locals.error = req.flash("error");
