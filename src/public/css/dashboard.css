@@ -1,0 +1,61 @@
+.dashboard {
+  height: 100vh;
+  background-image: linear-gradient(
+    to right bottom,
+    rgb(245, 58, 58),
+    rgba(225, 40, 99, 0.692)
+  );
+}
+/* profile ui section */
+.dashboard .profile-ui-section {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+}
+.dashboard .profile-ui-section .img-circle {
+  width: 40px;
+  height: 40px;
+  margin: 15px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+.dashboard .profile-ui-section .img-circle img {
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+}
+
+/* horizontal line */
+.line {
+  font-weight: 600;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+/* dashboard links */
+.dashboard .dash-links {
+  margin: 2rem 0px;
+}
+.dashboard .dash-links .link {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  margin: 1.1rem 10px;
+  padding: 0.85rem 1rem;
+  color: white;
+  font-weight: 600;
+  border-radius: 5px;
+}
+.dashboard .dash-links .link:hover {
+  background-color: rgba(228, 25, 89, 0.847);
+  color: white;
+  cursor: pointer;
+}
+#cart {
+position: relative;
+}
+#cart #items-count {
+      position: absolute;
+      right: 20px;
+}

@@ -7,7 +7,7 @@ const Redis = require("../utils/Redis.js");
 
 class UserController {
   static getRegister = (req, res) => {
-    res.render("signup.ejs");
+    res.render("auth/signup.ejs");
   };
 
   static postRegister = async (req, res) => {
@@ -55,9 +55,13 @@ class UserController {
       //user registered successfully
 
       // send verification email
-      const doctype_html = `<h4>Hi ${name},your email verification otp : ${verification_token}`;
 
-      await NodeMailer.sendingMail(email, "Email Verification", doctype_html);
+      NodeMailer.sendingMail(
+        email,
+        newUser.name,
+        verification_token,
+        "Verify your email!"
+      );
 
       return res.status(200).json({
         success: true,
@@ -70,18 +74,19 @@ class UserController {
         message: error.message,
       });
     }
+    // d-1e26070cbfd54e66bc249f9529d8de69
   };
 
   static getLogin = (req, res) => {
-    res.render("login", { message: req.flash() });
+    res.render("auth/login.ejs");
   };
 
   static getHome = (req, res) => {
-    res.render("home.ejs");
+    res.render("auth/home.ejs");
   };
 
   static getVerificationScreen = (req, res) => {
-    res.render("verify.ejs");
+    res.render("auth/verify.ejs");
   };
 
   static verifyEmail = async (req, res) => {
@@ -132,6 +137,7 @@ class UserController {
 
     const email = user.email;
     const verification_token = JWT.generateOTP();
+    console.log(email);
 
     try {
       const newUser = await User.findOneAndUpdate(
@@ -148,9 +154,15 @@ class UserController {
         }
       );
 
+      console.log(newUser);
+
       if (newUser) {
-        const doctype_html = `<h4>Hi ${user.name},your resend email verification otp : ${verification_token}`;
-        await NodeMailer.sendingMail(email, "Email Verification", doctype_html);
+        await NodeMailer.sendingMail(
+          email,
+          newUser.name,
+          verification_token,
+          "Your Verification email"
+        );
 
         return res.json({
           success: true,
@@ -196,7 +208,6 @@ class UserController {
           httpOnly: true,
           secure: true,
           sameSite: "strict",
-
           maxAge: parseInt(process.env.JWT_ACCESS_COOKIE_EXPIRES),
         })
         .json({
@@ -230,15 +241,12 @@ class UserController {
   };
 
   static getForgotPassword = async (req, res) => {
-    const email = req.query.email;
-
-    const response = await this.sendResetPasswordToken(email);
-
-    res.render("verify_reset_password_otp.ejs", { email, response });
+    res.render("auth/send_reset_password_otp.ejs");
   };
 
-  static sendResetPasswordToken = async (email) => {
+  static sendResetPasswordToken = async (req, res) => {
     //generate the otp
+    const { email } = req.body;
     const otp = JWT.generateOTP();
     try {
       const user = await User.findOneAndUpdate(
@@ -255,19 +263,27 @@ class UserController {
       );
 
       if (!user) {
-        throw new Error("failed to send email");
+        throw new Error("email does not exists");
       }
 
+      const link = `http://localhost:${process.env.PORT}/auth/reset/password?email=${email}`;
       //send to the email
-      await NodeMailer.sendingMail(
+      await NodeMailer.sendResetPasswordEmail(
         email,
-        "Reset password verification mail",
-        `<h3>Your OneTimePassword for Reset password : ${otp}</h3>`
+        user.name,
+        link,
+        "Password reset email"
       );
 
-      return "OTP has been sent successfully to your email";
+      return res.json({
+        success: true,
+        message: "OTP has been sent to your email",
+      });
     } catch (error) {
-      return error.message;
+      return res.json({
+        success: false,
+        message: error.message,
+      });
     }
   };
 
@@ -298,7 +314,7 @@ class UserController {
   };
 
   static getResetPassword = (req, res) => {
-    res.render("reset_password.ejs", { email: req.query.email });
+    res.render("auth/reset_password.ejs", { email: req.query.email });
   };
 
   static resetPassword = async (req, res) => {

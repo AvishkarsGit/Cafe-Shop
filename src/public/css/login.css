@@ -1,0 +1,70 @@
+body {
+  background: #eee;
+}
+.form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 5% auto;
+  letter-spacing: 1.4px;
+}
+
+.heading {
+  text-align: center;
+  margin: 10px 0px;
+}
+form {
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.2);
+  width: 420px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 5px;
+}
+form input {
+  width: 100%;
+  margin: 10px 0px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.btn {
+  text-align: center;
+}
+.btn button {
+  height: 40px;
+  width: 150px;
+  text-transform: uppercase;
+  outline: none;
+  border: none;
+  background-color: var(--color-primary);
+  font-weight: 600;
+  color: white;
+  border-radius: 7px;
+}
+
+.btn button:hover {
+  background-color: var(--color-btn-hover);
+  color: white;
+  cursor: pointer;
+}
+.forgot-link {
+  text-align: end;
+  margin: 15px 0px;
+}
+.forgot-link a {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+.register-btn {
+  text-align: center;
+  margin: 20px 0px;
+  font-weight: 650;
+}
+
+.register-btn a {
+  cursor: pointer;
+  color: var(--color-primary);
+}

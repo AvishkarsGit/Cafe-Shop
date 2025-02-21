@@ -1,0 +1,18 @@
+<nav>
+  <div class="navbar">
+    <!-- logo -->
+    <div class="logo">
+      <span>Raje Royal Cafe</span>
+    </div>
+
+    <!-- icon button -->
+    <div class="icons">
+      <% if (currUser) { %> <% const words = currUser.name.split(" "); const
+      name = `${words[0].charAt(0)}${words[words.length-1].charAt(0)}`; %>
+      <div class="profile">
+        <span><%= name %></span>
+      </div>
+      <% } %>
+    </div>
+  </div>
+</nav>

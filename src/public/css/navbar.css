@@ -1,0 +1,98 @@
+.navbar {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+.navbar .logo span {
+  font-weight: 600;
+  font-family: "Oswald", serif;
+  font-size: 1.2rem;
+  color: var(--color-primary);
+  letter-spacing: 1px;
+  margin-left: 1.2rem;
+}
+.navbar .nav-links ul {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.navbar .nav-links ul a {
+  font-weight: 660;
+  color: var(--color-black-third);
+}
+.navbar .icons {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.navbar .icons .profile {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-weight: 600;
+  background-color: var(--color-black-third);
+  border-radius: 50%;
+  padding: 8px;
+  cursor: pointer;
+  color: white;
+  letter-spacing: 2px;
+}
+
+/* login */
+.navbar .icons .login {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-weight: 600;
+}
+.navbar .icons .login span {
+  color: var(--color-black-third);
+  text-transform: uppercase;
+}
+
+/* signup */
+.navbar .icons .signup {
+  padding: 5px 10px;
+  border-radius: 2px;
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.navbar .icons .signup span {
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* logout */
+.navbar .icons .logout {
+  font-weight: 650;
+  text-transform: uppercase;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.navbar .icons i {
+  font-size: 1.7rem;
+  color: var(--color-black-third);
+  cursor: pointer;
+}
+
+#btnBookTable {
+  outline: none;
+  border: none;
+  padding: 7px 15px;
+  background-color: var(--color-primary);
+  color: white;
+  font-size: 1rem;
+  font-weight: 660;
+}
+#btnBookTable:hover {
+  cursor: pointer;
+  background-color: var(--color-black-third);
+}
