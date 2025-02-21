@@ -82,7 +82,13 @@ class UserController {
   };
 
   static getHome = (req, res) => {
-    res.render("auth/home.ejs");
+    const type = req.user.type;
+    if (type === 'admin') {
+      res.render("products/index.ejs")
+    }
+    else {
+      res.render("auth/home.ejs");
+    }
   };
 
   static getVerificationScreen = (req, res) => {
@@ -94,6 +100,7 @@ class UserController {
       let verification_token = req.body.verification_token;
 
       const user = await User.findOne({
+        verification_token,
         verification_token,
         verification_token_time: { $gt: Date.now() },
       });

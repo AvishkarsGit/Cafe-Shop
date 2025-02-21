@@ -28,9 +28,7 @@ router
   .route("/logout")
   .post(GlobalMiddleware.isLoggedIn, UserController.logout);
 
-router
-  .route("/forgot-password")
-  .get(GlobalMiddleware.isLoggedIn, UserController.getForgotPassword);
+router.route("/forgot-password").get(GlobalMiddleware.isLoggedIn,UserController.getForgotPassword);
 
 router
   .route("/reset/password")

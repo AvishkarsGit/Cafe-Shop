@@ -9,7 +9,6 @@ router.use(
   GlobalMiddleware.isAdmin
 );
 
-router.route("/").get(ProductController.getHome);
 router.route("/create").post(ProductController.addProduct);
 
 router.route("/read").get(ProductController.getAllProducts);

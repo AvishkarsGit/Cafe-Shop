@@ -1,25 +1,42 @@
-<% layout("layouts/boilerplate.ejs") %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
 
-<body>
-  <div class="verification-form">
-    <form action="/auth/verify" method="post" id="verification-form">
-      <h3>Verify Email using OTP</h3>
-      <input
-        type="text"
-        name="verification_token"
-        placeholder="Enter OTP"
-        id="verification_token"
-      />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-      <button id="verify">Verify</button>
-      <button id="sendBtn">get OTP</button>
+    <link rel="stylesheet" href="/css/index.css" />
+    <link rel="stylesheet" href="/css/login.css" />
+    <link rel="stylesheet" href="/css/verify.css" />
+  </head>
 
-      <div class="resend-btn">
-        <p id="resend-in">Resend in : 60 sec</p>
-        <button id="resendbtn">Resend OTP</button>
-      </div>
-    </form>
-  </div>
+  <body>
+    <div class="verification-form">
+      <form action="/auth/verify" method="post" id="verification-form">
+        <h3>Verify Email using OTP</h3>
+        <input
+          type="text"
+          name="verification_token"
+          placeholder="Enter OTP"
+          id="verification_token"
+        />
 
-  <script src="/js/email_verify.js"></script>
-</body>
+        <button id="verify">Verify</button>
+        <button id="sendBtn">get OTP</button>
+
+        <div class="resend-btn">
+          <p id="resend-in">Resend in : 60 sec</p>
+          <button id="resendbtn">Resend OTP</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- sweet alert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="/js/index.js"></script>
+    <script src="/js/email_verify.js"></script>
+  </body>
+</html>

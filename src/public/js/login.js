@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
           "success"
         );
         setTimeout(() => {
-          location.replace("/home"); // Redirect after login
+          location.replace("/"); // Redirect after login
         }, 5000);
       } else {
         showErrorAlert(error.response.message);
@@ -65,5 +65,4 @@ document.addEventListener("DOMContentLoaded", function () {
       `/auth/forgot-password?email=${encodeURIComponent(email)}`
     );
   });
-
 });

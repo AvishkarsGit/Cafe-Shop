@@ -5,7 +5,7 @@ const HomeController = require("../controller/home.controller.js");
 const router = express.Router();
 
 router
-  .route("/home")
+  .route("/")
   .get(
     GlobalMiddleware.isLoggedIn,
     GlobalMiddleware.isUserExist,
