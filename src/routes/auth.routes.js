@@ -30,7 +30,7 @@ router
 
 router
   .route("/forgot-password")
-  .get(GlobalMiddleware.isLoggedIn, UserController.getForgotPassword);
+  .get(UserController.getForgotPassword);
 
 router
   .route("/reset/password")
