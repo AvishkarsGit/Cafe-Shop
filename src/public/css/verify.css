@@ -1,6 +1,7 @@
-.verification-form {
-  margin: 8rem auto;
+body{ 
+  background-color: #eee;
 }
+
 #verify {
   outline: none;
   border: none;

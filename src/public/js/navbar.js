@@ -1,7 +1,6 @@
 const signupBtn = document.getElementById("signup-btn");
 const loginBtn = document.getElementById("login-btn");
 const logoutBtn = document.getElementById("logout-btn");
-const changePasswordBtn = document.getElementById("change-password");
 const menusBtn = document.getElementById("menus");
 const orderBtn = document.getElementById("orders");
 const cartBtn = document.getElementById("cart");
@@ -25,10 +24,6 @@ checkRoutes = () => {
     case "/profile":
       profileBtn.style.backgroundColor = "rgba(228, 25, 89, 0.847)";
       profileBtn.style.color = "white";
-      break;
-    case "/auth/forgot-password":
-      changePasswordBtn.style.backgroundColor = "rgba(228, 25, 89, 0.847)";
-      changePasswordBtn.style.color = "white";
       break;
     case "/auth/reset/password":
       changePasswordBtn.style.backgroundColor = "rgba(228, 25, 89, 0.847)";
@@ -81,17 +76,6 @@ if (logoutBtn) {
       }
     } catch (error) {
       // showErrorAlert(error.response.data.message);
-    }
-  });
-}
-
-if (changePasswordBtn) {
-  changePasswordBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    try {
-      location.replace("/auth/forgot-password");
-    } catch (error) {
-      console.log(error);
     }
   });
 }

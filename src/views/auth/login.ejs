@@ -1,38 +1,52 @@
-<% layout("layouts/boilerplate.ejs") %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
 
-<body>
-  <div class="form">
-    <form action="/auth/login" method="post" id="login-form">
-      <div class="heading">
-        <h2>Login into your account</h2>
-      </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-      <div class="email-field">
-        <input
-          type="email"
-          placeholder="enter email"
-          name="email"
-          required
-          id="email"
-        />
-      </div>
+    <link rel="stylesheet" href="/css/index.css" />
+    <link rel="stylesheet" href="/css/login.css" />
+  </head>
+  <body>
+    <div class="form">
+      <form action="/auth/login" method="post" id="login-form">
+        <div class="heading">
+          <h2>Login into your account</h2>
+        </div>
 
-      <div class="password-field">
-        <input
-          type="password"
-          placeholder="enter password"
-          name="password"
-          required
-          id="password"
-        />
-      </div>
+        <div class="email-field">
+          <input
+            type="email"
+            placeholder="enter email"
+            name="email"
+            required
+            id="email"
+          />
+        </div>
 
-      <div class="btn">
-        <button>Sign in</button>
-      </div>
-    </form>
-  </div>
+        <div class="password-field">
+          <input
+            type="password"
+            placeholder="enter password"
+            name="password"
+            required
+            id="password"
+          />
+        </div>
 
-  <script src="/js/index.js"></script>
-  <script src="/js/login.js"></script>
-</body>
+        <div class="btn">
+          <button>Sign in</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- sweet alert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="/js/index.js"></script>
+    <script src="/js/login.js"></script>
+  </body>
+</html>
