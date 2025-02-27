@@ -31,7 +31,6 @@
     <link rel="stylesheet" href="/css/reset_password.css" />
     <link rel="stylesheet" href="/css/new_password_set.css" />
     <link rel="stylesheet" href="/css/verify.css" />
-    <link rel="stylesheet" href="/css/menu.css" />
   </head>
   <body>
     <!-- header -->
@@ -40,9 +39,12 @@
 
     <!-- main -->
     <div class="container">
-      <%- include("../includes/dashboard.ejs") %>
-      <!-- body -->
-      <%- body %>
+      <div class="dashboard-container">
+       Dashboard
+      </div>
+      <div class="main-content">
+        Main
+      </div>
     </div>
 
     <!-- footer -->
