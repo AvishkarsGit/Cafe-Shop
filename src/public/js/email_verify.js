@@ -35,7 +35,7 @@ if (verifyBtn) {
       showSuccessAlert(response.data.message, "Please wait");
 
       setTimeout(() => {
-        location.replace("/home");
+        location.replace("/");
       }, 5000);
     } catch (error) {
       showErrorAlert(error.response?.data?.message || "Verification failed");

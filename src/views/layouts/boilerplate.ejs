@@ -10,7 +10,7 @@
     <!-- tailwind css -->
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- box-icons -->
     <link
       rel="stylesheet"
@@ -27,11 +27,11 @@
     <link rel="stylesheet" href="/css/index.css" />
     <link rel="stylesheet" href="/css/navbar.css" />
     <link rel="stylesheet" href="/css/signup.css" />
-    <link rel="stylesheet" href="/css/home.css" />
     <link rel="stylesheet" href="/css/dashboard.css" />
     <link rel="stylesheet" href="/css/reset_password.css" />
     <link rel="stylesheet" href="/css/new_password_set.css" />
     <link rel="stylesheet" href="/css/verify.css" />
+    <link rel="stylesheet" href="/css/menu.css" />
   </head>
   <body>
     <!-- header -->
@@ -40,7 +40,9 @@
 
     <!-- main -->
     <div class="container">
-      <%- include("../includes/dashboard.ejs") %> <%- body %>
+      <%- include("../includes/dashboard.ejs") %>
+      <!-- body -->
+      <%- body %>
     </div>
 
     <!-- footer -->
