@@ -6,8 +6,7 @@
         alt=""
       />
     </div>
-    <% if (currUser) { %> <%= currUser.name %> <% } %> <% if (!currUser) { %> No
-    User!. <% } %>
+    <% if (currUser) { %> <%= currUser.name %> <% } %>
   </div>
   <div class="line"></div>
   <div class="dash-links">
@@ -27,13 +26,12 @@
       <i class="ri-user-line"></i>
       Profile
     </div>
-      <!-- show only if user is logged in -->
-      <% if (currUser) { %>
-      <div class="link" id="logout-btn">
-        <i class="ri-logout-circle-r-line"></i>
-        Logout
-      </div>
-      <% } %>
+    <!-- show only if user is logged in -->
+    <% if (currUser) { %>
+    <div class="link" id="logout-btn">
+      <i class="ri-logout-circle-r-line"></i>
+      Logout
     </div>
+    <% } %>
   </div>
 </div>
