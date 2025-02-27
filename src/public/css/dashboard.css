@@ -52,10 +52,3 @@
   color: white;
   cursor: pointer;
 }
-#cart {
-  position: relative;
-}
-#cart #items-count {
-  position: absolute;
-  right: 20px;
-}

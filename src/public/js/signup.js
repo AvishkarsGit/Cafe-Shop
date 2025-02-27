@@ -1,3 +1,5 @@
+const signupBtn = document.getElementById("sign-in-btn");
+
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("signup-form");
 
@@ -48,4 +50,9 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
   });
+});
+
+signupBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  location.replace("/auth/login");
 });
