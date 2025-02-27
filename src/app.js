@@ -50,7 +50,7 @@ app.use(flash());
 DB.dbConnect()
   .then((res) => {
     app.listen(port, () => {
-      console.log(`http://localhost:${port}/home`);
+      console.log(`http://localhost:${port}/`);
       console.log(`Database connected`);
     });
   })

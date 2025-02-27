@@ -53,9 +53,9 @@
   cursor: pointer;
 }
 #cart {
-position: relative;
+  position: relative;
 }
 #cart #items-count {
-      position: absolute;
-      right: 20px;
+  position: absolute;
+  right: 20px;
 }

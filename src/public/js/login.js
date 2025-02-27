@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
   });
-
+ 
   forgotBtn.addEventListener("click", async (e) => {
     e.preventDefault();
 

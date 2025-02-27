@@ -9,7 +9,7 @@ const profileBtn = document.getElementById("profile");
 checkRoutes = () => {
   const currentPath = window.location.pathname;
   switch (currentPath) {
-    case "/home":
+    case "/":
       menusBtn.style.backgroundColor = "rgba(228, 25, 89, 0.847)";
       menusBtn.style.color = "white";
       break;
@@ -83,7 +83,7 @@ if (logoutBtn) {
 if (menusBtn) {
   menusBtn.addEventListener("click", async (e) => {
     e.preventDefault();
-    location.replace("/home");
+    location.replace("/");
   });
 }
 

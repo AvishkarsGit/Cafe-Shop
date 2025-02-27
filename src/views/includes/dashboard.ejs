@@ -19,33 +19,33 @@
       <i class="ri-list-ordered"></i>
       My Orders
     </div>
-    <div class="link" id="cart">
-      <i class="ri-shopping-cart-2-line"></i>
-      Cart
-      <span id="items-count">0</span>
+    <div class="link">
+      <i class="ri-add-line"></i>
+      Add
     </div>
     <div class="link" id="profile">
       <i class="ri-user-line"></i>
       Profile
     </div>
-    <!-- show only if user is logged in -->
-    <% if (currUser) { %>
-    <div class="link" id="logout-btn">
-      <i class="ri-logout-circle-r-line"></i>
-      Logout
-    </div>
-    <% } %>
-    <!-- show only if user is logged out  -->
+      <!-- show only if user is logged in -->
+      <% if (currUser) { %>
+      <div class="link" id="logout-btn">
+        <i class="ri-logout-circle-r-line"></i>
+        Logout
+      </div>
+      <% } %>
+      <!-- show only if user is logged out  -->
 
-    <% if (!currUser) { %>
-    <div class="link" id="login-btn">
-      <i class="ri-login-box-line"></i>
-      Login
+      <% if (!currUser) { %>
+      <div class="link" id="login-btn">
+        <i class="ri-login-box-line"></i>
+        Login
+      </div>
+      <div class="link" id="signup-btn">
+        <i class="ri-registered-line"></i>
+        Signup
+      </div>
+      <% } %>
     </div>
-    <div class="link" id="signup-btn">
-      <i class="ri-registered-line"></i>
-      Signup
-    </div>
-    <% } %>
   </div>
 </div>
