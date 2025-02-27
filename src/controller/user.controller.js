@@ -284,7 +284,7 @@ class UserController {
 
       return res.json({
         success: true,
-        message: "OTP has been sent to your email",
+        message: "Link has been sent to your email",
       });
     } catch (error) {
       return res.json({

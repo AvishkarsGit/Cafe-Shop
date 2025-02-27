@@ -5,7 +5,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 5% auto;
   letter-spacing: 1.4px;
 }
 
@@ -34,21 +33,25 @@ body {
   color: white;
   cursor: pointer;
 }
-.forgot-link {
+.forgot-pass {
   text-align: end;
+  margin-bottom: 10px;
+}
+.forgot-pass p {
+  font-weight: 600;
+  color: var(--color-primary);
+  letter-spacing: 1px;
+}
+.signup-form {
+  text-align: center;
   margin: 15px 0px;
 }
-.forgot-link a {
-  color: var(--color-primary);
-  font-weight: 600;
+.signup-form p {
+  font-weight: 500;
+  color: black;
 }
-.register-btn {
-  text-align: center;
-  margin: 20px 0px;
+.signup-form p span {
+  color: var(--color-primary);
   font-weight: 650;
-}
-
-.register-btn a {
   cursor: pointer;
-  color: var(--color-primary);
 }

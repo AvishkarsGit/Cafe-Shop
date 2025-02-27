@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   const loginForm = document.getElementById("login-form");
   const forgotBtn = document.getElementById("forgot-btn");
+  const signupBtn = document.getElementById("signup-btn");
 
   if (!loginForm) {
     console.log("Form not found");
@@ -50,19 +51,14 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
   });
- 
+
   forgotBtn.addEventListener("click", async (e) => {
     e.preventDefault();
+    location.assign(`/auth/forgot-password`);
+  });
 
-    let email = document.getElementById("email").value;
-
-    if (!email) {
-      showErrorAlert("please provide email to set new password");
-      return;
-    }
-
-    location.replace(
-      `/auth/forgot-password?email=${encodeURIComponent(email)}`
-    );
+  signupBtn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    location.replace("/auth/register");
   });
 });
