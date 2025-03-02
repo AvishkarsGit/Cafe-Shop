@@ -15,16 +15,37 @@ class ProductController {
     res.redirect("/products/read");
   };
 
+  static getIndexPage = (req, res) => {
+    res.render("products/index.ejs");
+  };
+
   static getAllProducts = async (req, res) => {
-    let cafeproduct = await productData.find();
-    res.render("products/read", { cafeproduct });
+    res.redirect("/");
   };
 
   static deleteProduct = async (req, res) => {
-    const products = await productData.findByIdAndDelete({
-      _id: req.params.id,
-    });
-    res.redirect("/products/read");
+    try {
+      const products = await productData.findByIdAndDelete(
+        {
+          _id: req.params.id,
+        },
+        {
+          new: true,
+        }
+      );
+
+      console.log(products);
+
+      return res.json({
+        success: true,
+        message: "Product deleted successfully",
+      });
+    } catch (error) {
+      return res.json({
+        success: false,
+        message: error.message,
+      });
+    }
   };
 
   static editProduct = async (req, res) => {
@@ -33,13 +54,29 @@ class ProductController {
   };
 
   static updateProduct = async (req, res) => {
-    let { ProductName, ProductPrice, Description, imgUrl } = req.body;
-    const product = await productData.findOneAndUpdate(
-      { _id: req.params.id },
-      { ProductName, ProductPrice, Description, imgUrl },
-      { new: true }
-    );
-    res.redirect("/products/read");
+    try {
+      let data = {
+        ProductName: req.body.ProductName,
+        ProductPrice: req.body.ProductPrice,
+        Description: req.body.Description,
+        imgUrl: req.body.imgUrl,
+      };
+      const product = await productData.findOneAndUpdate(
+        { _id: req.params.id },
+        data,
+        { new: true }
+      );
+
+      return res.json({
+        success: true,
+        message: "products data updated successfully",
+      });
+    } catch (error) {
+      return res.json({
+        success: false,
+        message: error.message,
+      });
+    }
   };
 }
 

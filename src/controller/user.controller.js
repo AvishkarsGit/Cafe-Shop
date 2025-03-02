@@ -1,6 +1,7 @@
 const User = require("../models/user.model.js");
 const JWT = require("../utils/jwt.js");
 const NodeMailer = require("../utils/NodeMailer.js");
+const Product = require("../models/products.model.js");
 require("dotenv").config();
 
 const Redis = require("../utils/Redis.js");
@@ -81,12 +82,13 @@ class UserController {
     res.render("auth/login.ejs");
   };
 
-  static getHome = (req, res) => {
+  static getHome = async (req, res) => {
     const type = req.user.type;
-    if (type === 'admin') {
-      res.render("products/index.ejs")
-    }
-    else {
+    const products = await Product.find();
+
+    if (type === "admin") {
+      res.render("products/all_product.ejs", { products });
+    } else {
       res.render("auth/home.ejs");
     }
   };

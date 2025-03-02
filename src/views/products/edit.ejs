@@ -1,63 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MainPage</title>
-  </head>
-  <body>
-    <!DOCTYPE html>
-    <html lang="en">
-      <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Server side rendering</title>
-        <link rel="stylesheet" href="/stylesheets/style.css" />
-        <script src="https://cdn.tailwindcss.com"></script>
-      </head>
-      <body>
-        <div class="w-full h-full bg-zinc-900 p-10 text-white">
-          <div class="nav mb-10">
-            <a class="text-blue-500" href="/products/read">All Products</a>
-          </div>
-          <h1 class="text-3xl tracking-tighter mb-3">Edit Product</h1>
-          <form action="/products/update/<%= product._id  %>" method="post">
-            <input
-              class="px-5 py-2 bg-transparent border-2 border-zinc-800 rounded-lg outline-none"
-              name="ProductName"
-              type="text"
-              placeholder="Product Name"
-              value="<%= product.ProductName  %>"
-            />
-            <input
-              class="px-5 py-2 bg-transparent border-2 border-zinc-800 rounded-lg outline-none"
-              name="ProductPrice"
-              type="text"
-              placeholder="Product Price"
-              value="<%= product.ProductPrice  %>"
-            />
-            <input
-              class="px-5 py-2 bg-transparent border-2 border-zinc-800 rounded-lg outline-none"
-              name="Description"
-              type="text"
-              placeholder="Discription"
-              value="<%= product.Description  %>"
-            />
-            <input
-              class="px-5 py-2 bg-transparent border-2 border-zinc-800 rounded-lg outline-none"
-              name="imgUrl"
-              type="text"
-              placeholder="image Url"
-              value="<%= product.imgUrl  %>"
-            />
-            <input
-              class="px-5 py-2 bg-orange-500 rounded-lg ml-3"
-              type="submit"
-              value="Edit"
-            />
-          </form>
-        </div>
-      </body>
-    </html>
-  </body>
-</html>
+<% layout("layouts/boilerplate.ejs") %>
+<body>
+  <div class="edit-form">
+    <form
+      action="/products/update/<%= product._id  %>"
+      method="post"
+      id="edit-form"
+    >
+      <h1>Edit Product</h1>
+      <input
+        name="ProductName"
+        type="text"
+        placeholder="Product Name"
+        value="<%= product.ProductName  %>"
+        id="ProductName"
+      />
+      <input
+        name="ProductPrice"
+        type="text"
+        placeholder="Product Price"
+        value="<%= product.ProductPrice  %>"
+        id="ProductPrice"
+      />
+      <input
+        name="Description"
+        type="text"
+        placeholder="Discription"
+        value="<%= product.Description  %>"
+        id="Description"
+      />
+      <input
+        name="imgUrl"
+        type="text"
+        placeholder="image Url"
+        value="<%= product.imgUrl  %>"
+        id="imgUrl"
+      />
+      <div class="btn-update">
+        <button id="update" onclick="updateProduct(event,'<%= product._id %>')">
+          Update
+        </button>
+      </div>
+    </form>
+  </div>
+  <script>
+    async function updateProduct(event, id) {
+      event.preventDefault();
+      const editForm = document.getElementById("edit-form");
+      console.log(editForm);
+      const formData = new FormData(editForm); // Correct way to create FormData
+
+      const userData = {
+        ProductName: formData.get("ProductName"),
+        ProductPrice: formData.get("ProductPrice"),
+        Description: formData.get("Description"),
+        imgUrl: formData.get("imgUrl"),
+      };
+
+      try {
+        const response = await axios.put(`/products/update/${id}`, userData, {
+          withCredentials: true,
+          headers: { "Content-Type": "application/json" },
+        });
+
+        if (response.data.success) {
+          showSuccessAlert(response.data.message, "Please wait");
+          setTimeout(() => {
+            location.replace("/");
+          }, 5000);
+        }
+      } catch (error) {
+        showErrorAlert(error.response.data.message);
+      }
+    }
+  </script>
+</body>

@@ -1,40 +1,31 @@
 <% layout("layouts/boilerplate.ejs") %>
 <body>
-  <div class="w-full h-full bg-zinc-900 p-10 text-white">
-    <div class="nav mb-10">
-      <a class="text-blue-500" href="/products/read">Read Users</a>
-    </div>
-    <h1 class="text-3xl tracking-tighter mb-3">Create User</h1>
+  <div>
     <form action="/products/create" method="post">
+      <h1 id="title">Add New Product</h1>
       <input
-        class="px-5 py-2 bg-transparent border-2 border-zinc-800 rounded-lg outline-none"
         name="ProductName"
         type="text"
         placeholder="Product Name"
       />
       <input
-        class="px-5 py-2 bg-transparent border-2 border-zinc-800 rounded-lg outline-none"
         name="ProductPrice"
         type="text"
         placeholder="Product Price"
       />
       <input
-        class="px-5 py-2 bg-transparent border-2 border-zinc-800 rounded-lg outline-none"
         name="Description"
         type="text"
         placeholder="Discription"
       />
       <input
-        class="px-5 py-2 bg-transparent border-2 border-zinc-800 rounded-lg outline-none"
         name="imgUrl"
         type="text"
         placeholder="image Url"
       />
-      <input
-        class="px-5 py-2 bg-blue-500 rounded-lg ml-3"
-        type="submit"
-        value="Create"
-      />
+      <div class="btn-add">
+        <button id="add-btn">Add Product</button>
+      </div>
     </form>
   </div>
 </body>

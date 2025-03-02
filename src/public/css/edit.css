@@ -1,0 +1,27 @@
+.edit-form {
+}
+.edit-form h1 {
+  text-align: center;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: larger;
+}
+#update {
+  background-color: var(--color-primary);
+  color: white;
+  text-transform: uppercase;
+  padding: 3px 15px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  cursor: pointer;
+}
+
+.btn-update {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+}
+#update:hover {
+      background-color: var(--color-success);
+}

@@ -9,7 +9,10 @@ router.use(
   GlobalMiddleware.isAdmin
 );
 
-router.route("/create").post(ProductController.addProduct);
+router
+  .route("/create")
+  .get(ProductController.getIndexPage)
+  .post(ProductController.addProduct);
 
 router.route("/read").get(ProductController.getAllProducts);
 
@@ -17,6 +20,6 @@ router.route("/delete/:id").get(ProductController.deleteProduct);
 
 router.route("/edit/:id").get(ProductController.editProduct);
 
-router.route("/update/:id").post(ProductController.updateProduct);
+router.route("/update/:id").put(ProductController.updateProduct);
 
 module.exports = router;

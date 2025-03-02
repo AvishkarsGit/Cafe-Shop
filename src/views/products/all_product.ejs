@@ -1,0 +1,43 @@
+<% layout("layouts/boilerplate.ejs") %>
+<body>
+  <div class="card-container">
+    <% if (products && products.length) { %> <% for (let product of products) {
+    %>
+    <div class="card">
+      <img src="<%= product.imgUrl %>" alt="product" />
+      <h3><%= product.ProductName %></h3>
+      <p><%= product.Description %></p>
+      <span>$ <%= product.ProductPrice %></span>
+      <div class="modify">
+        <button id="edit" onclick="editProduct('<%= product._id %>')">
+          Edit
+        </button>
+        <button id="delete" onclick="deleteProduct('<%= product._id %>')">
+          Delete
+        </button>
+      </div>
+    </div>
+    <% } %> <% } %>
+  </div>
+
+  <script>
+    async function deleteProduct(id) {
+      try {
+        const response = await axios.get(`/products/delete/${id}`);
+
+        if (response.data.success) {
+          showSuccessAlert(response.data.message, "Please wait...");
+          setTimeout(() => {
+            window.location.reload();
+          }, 5000);
+        }
+      } catch (error) {
+        showErrorAlert(error.response.data.message);
+      }
+    }
+
+    function editProduct(id) {
+      location.assign(`/products/edit/${id}`);
+    }
+  </script>
+</body>

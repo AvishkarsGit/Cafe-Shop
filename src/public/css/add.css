@@ -1,0 +1,26 @@
+.btn-add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#title {
+  font-weight: 700;
+  font-size: larger;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  text-align: center;
+}
+#add-btn {
+  border: none;
+  outline: none;
+  background-color: var(--color-primary);
+  color: white;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  padding: 3px 15px;
+  border-radius: 5px;
+}
+#add-btn:hover {
+  background-color: var(--color-btn-hover);
+}
