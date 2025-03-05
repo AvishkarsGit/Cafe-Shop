@@ -1,0 +1,47 @@
+<% layout('layouts/boilerplate.ejs') %>
+<body>
+  <form action="/category/new" method="post" id="category-form">
+    <h3 id="title">Add new Category</h3>
+    <input
+      type="text"
+      placeholder="Enter Category name (e.g.Pizza)"
+      id="category"
+      name="category"
+    />
+    <div class="btn">
+      <button id="save-category">Save</button>
+    </div>
+  </form>
+
+  <script>
+    const categoryForm = document.getElementById("category-form");
+    const saveBtn = document.getElementById("save-category");
+    
+
+    saveBtn.addEventListener("click", async (e) => {
+      e.preventDefault();
+
+
+      const formData = new FormData(categoryForm);
+
+      const categoryData = {
+        category: formData.get("category"),
+      };
+
+      try {
+            
+        const response = await axios.post("/category/new", categoryData, {
+          headers: { "Content-Type": "application/json" },
+        });
+        if (response.data.success) {
+          showSuccessAlert(response.data.message, "Please wait");
+          setTimeout(() => {
+            window.location.reload();
+          }, 5000);
+        }
+      } catch (error) {
+        showErrorAlert(error.response.data.message);
+      }
+    });
+  </script>
+</body>

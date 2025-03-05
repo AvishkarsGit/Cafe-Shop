@@ -1,4 +1,4 @@
-body{ 
+body {
   background-color: #eee;
 }
 
@@ -61,3 +61,14 @@ body{
   display: none;
 }
 
+#subtext {
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+  font-weight: 400;
+  color: var(--color-primary);
+  text-align: center;
+}
+
+h3 {
+  text-align: center;
+}

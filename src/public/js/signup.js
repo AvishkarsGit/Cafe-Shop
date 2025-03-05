@@ -24,6 +24,34 @@ document.addEventListener("DOMContentLoaded", function () {
 
     //alert("Please wait..."); //ui part
 
+    if (userData.name.trim() === "") {
+      showErrorAlert("Name must be required");
+      return;
+    }
+    if (userData.email.trim() === "") {
+      showErrorAlert("Email must be required");
+      return;
+    }
+    if (userData.phone.trim() === "") {
+      showErrorAlert("Phone number must be required");
+      return;
+    }
+    if (userData.password.trim() === "") {
+      showErrorAlert("password number must be required");
+      return;
+    }
+    if (
+      userData.password.trim().length < 8 ||
+      userData.password.trim().length > 15
+    ) {
+      showErrorAlert("password  must be in between 8-15 character");
+      return;
+    }
+    if (userData.confirmPassword.trim() !== userData.password.trim()) {
+      showErrorAlert("password  does not match with confirm password");
+      return;
+    }
+
     try {
       const response = await axios.post("/auth/register", userData, {
         withCredentials: true,
@@ -31,23 +59,13 @@ document.addEventListener("DOMContentLoaded", function () {
       });
 
       if (response.data.success) {
-        showSuccessAlert(response.data.message, "Please wait for some seconds");
+        showSuccessAlert(response.data.message, "Please wait..");
         setTimeout(() => {
           location.replace("/auth/verify");
         }, 5000);
       }
     } catch (error) {
-      if (error.response && error.response.data.message) {
-        const errors = error.response.data.message;
-        let errorMessage = "";
-        Object.keys(errors).forEach((key) => {
-          errorMessage += `${errors[key]}`;
-        });
-
-        showErrorAlert(errorMessage);
-      } else {
-        showErrorAlert("Registration failed");
-      }
+      showErrorAlert(error.response.data.message);
     }
   });
 });

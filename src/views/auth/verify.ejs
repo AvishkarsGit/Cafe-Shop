@@ -10,12 +10,15 @@
     <link rel="stylesheet" href="/css/index.css" />
     <link rel="stylesheet" href="/css/login.css" />
     <link rel="stylesheet" href="/css/verify.css" />
+
+    
   </head>
 
   <body>
     <div class="verification-form">
       <form action="/auth/verify" method="post" id="verification-form">
         <h3>Verify Email using OTP</h3>
+        <p id="subtext"><i>Click on get otp button to verify email</i></p>
         <input
           type="text"
           name="verification_token"

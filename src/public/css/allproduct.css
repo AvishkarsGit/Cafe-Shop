@@ -1,5 +1,5 @@
 .card-container {
-  height: 90vh;
+  height: 100vh;
   padding: 10px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);

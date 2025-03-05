@@ -24,3 +24,20 @@
 #add-btn:hover {
   background-color: var(--color-btn-hover);
 }
+
+.options {
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  width: 100%;
+  padding: 6px;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+.options select {
+  border: none;
+  outline: none;
+  width: 100%;
+}
+.options option {
+  color: black;
+}

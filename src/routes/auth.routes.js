@@ -7,7 +7,11 @@ const router = express.Router();
 router
   .route("/register")
   .get(UserController.getRegister)
-  .post(AuthValidator.validateSignup, UserController.postRegister);
+  .post(
+    AuthValidator.validateSignup(),
+    GlobalMiddleware.checkError,
+    UserController.postRegister
+  );
 
 router
   .route("/verify")

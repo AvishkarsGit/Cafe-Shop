@@ -1,3 +1,4 @@
+const { validationResult } = require("express-validator");
 const User = require("../models/user.model.js");
 const JWT = require("../utils/jwt.js");
 require("dotenv").config();
@@ -59,7 +60,7 @@ class GlobalMiddleware {
       }
 
       if (user.email_verified) {
-        return res.redirect("/home");
+        return res.redirect("/");
       }
 
       req.user = user;
@@ -75,7 +76,7 @@ class GlobalMiddleware {
     const accessToken = req.cookies.accessToken;
 
     if (accessToken) {
-      return res.redirect("/home");
+      return res.redirect("/");
     }
     next();
   };
@@ -85,7 +86,7 @@ class GlobalMiddleware {
     const user = await User.findById({ _id: id });
     if (user.type !== "admin") {
       req.flash("error", "You are not an admin");
-      return res.redirect("/home");
+      return res.redirect("/");
     }
     next();
   };
@@ -112,6 +113,15 @@ class GlobalMiddleware {
     } catch (error) {
       req.flash("error", error.message);
       return res.redirect("/auth/login");
+    }
+  };
+
+  static checkError = (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      next(new Error(errors.array()[0].msg));
+    } else {
+      next();
     }
   };
 }

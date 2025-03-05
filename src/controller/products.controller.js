@@ -5,14 +5,26 @@ class ProductController {
   };
 
   static addProduct = async (req, res) => {
-    const { ProductName, ProductPrice, Description, imgUrl } = req.body;
-    const product = await productData.create({
-      ProductName,
-      ProductPrice,
-      Description,
-      imgUrl,
-    });
-    res.redirect("/products/read");
+    const { ProductName, ProductPrice, Description, imgUrl, category } =
+      req.body;
+    try {
+      const product = await productData.create({
+        ProductName,
+        ProductPrice,
+        Description,
+        imgUrl,
+        category,
+      });
+      return res.json({
+        success: true,
+        message: "Product added successfully",
+      });
+    } catch (error) {
+      return res.json({
+        success: false,
+        message: error.message,
+      });
+    }
   };
 
   static getIndexPage = (req, res) => {
@@ -33,8 +45,6 @@ class ProductController {
           new: true,
         }
       );
-
-      console.log(products);
 
       return res.json({
         success: true,

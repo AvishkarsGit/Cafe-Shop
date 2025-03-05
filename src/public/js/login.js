@@ -20,6 +20,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     //alert("Please wait...");
 
+    if (userData.email.trim() === "" || userData.password.trim() === "") {
+      showErrorAlert("Email and Password must be required");
+      return;
+    }
+
     try {
       const response = await axios.post("/auth/login", userData, {
         withCredentials: true,

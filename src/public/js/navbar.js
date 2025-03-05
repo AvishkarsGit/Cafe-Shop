@@ -5,7 +5,8 @@ const menusBtn = document.getElementById("menus");
 const orderBtn = document.getElementById("orders");
 const cartBtn = document.getElementById("cart");
 const profileBtn = document.getElementById("profile");
-const addBtn = document.getElementById("add-item");
+const productBtn = document.getElementById("add-product");
+const categoryBtn = document.getElementById("add-category");
 
 checkRoutes = () => {
   const currentPath = window.location.pathname;
@@ -43,8 +44,12 @@ checkRoutes = () => {
       profileBtn.style.color = "white";
       break;
     case "/products/create":
-      addBtn.style.backgroundColor = "rgba(228, 25, 89, 0.847)";
-      addBtn.style.color = "white";
+      productBtn.style.backgroundColor = "rgba(228, 25, 89, 0.847)";
+      productBtn.style.color = "white";
+      break;
+    case "/category/new":
+      categoryBtn.style.backgroundColor = "rgba(228, 25, 89, 0.847)";
+      categoryBtn.style.color = "white";
       break;
     default:
       break;
@@ -106,10 +111,17 @@ if (profileBtn) {
   });
 }
 
-if (addBtn) {
-  addBtn.addEventListener("click", (e) => {
+if (productBtn) {
+  productBtn.addEventListener("click", (e) => {
     e.preventDefault();
     location.assign("/products/create");
+  });
+}
+
+if (categoryBtn) {
+  categoryBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    location.assign("/category/new");
   });
 }
 

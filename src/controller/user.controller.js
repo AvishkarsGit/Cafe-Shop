@@ -55,19 +55,10 @@ class UserController {
 
       //user registered successfully
 
-      // send verification email
-
-      NodeMailer.sendingMail(
-        email,
-        newUser.name,
-        verification_token,
-        "Verify your email!"
-      );
 
       return res.status(200).json({
         success: true,
-        message:
-          "Your account create successfully,, please check your mail to verify",
+        message: "Your account created successfully"
       });
     } catch (error) {
       return res.status(400).json({
