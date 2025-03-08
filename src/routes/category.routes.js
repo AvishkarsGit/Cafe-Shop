@@ -9,11 +9,22 @@ router.use(
   GlobalMiddleware.isAdmin
 );
 
+router.route("/").get(CategoryController.getCategoryPage);
+
 router
-  .route("/new")
-  .get(CategoryController.getCategoryPage)
+  .route("/create")
+  .get(CategoryController.getCategoryForm)
   .post(CategoryController.addCategory);
 
 router.route("/categories").get(CategoryController.allCategories);
+
+
+router
+  .route("/edit/:id")
+  .get(CategoryController.getEditForm)
+  .post(CategoryController.editCategory);
+
+  
+router.route("/delete/:id").delete(CategoryController.deleteCategory);
 
 module.exports = router;

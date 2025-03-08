@@ -6,9 +6,12 @@ class CategoryController {
   };
   static addCategory = async (req, res) => {
     try {
-      const { category } = req.body;
+      const data = {
+        category: req.body.category,
+        categoryImgUrl: req.body.categoryImgUrl,
+      };
 
-      const cat = await new Category({ category }).save();
+      const cat = await new Category(data).save();
       return res.json({
         success: true,
         message: "Category added successfully",
@@ -33,6 +36,74 @@ class CategoryController {
       return res.json({
         success: false,
         message: error.message,
+      });
+    }
+  };
+
+  static getCategoryForm = async (req, res) => {
+    res.render("category/create_category.ejs");
+  };
+
+  static deleteCategory = async (req, res) => {
+    const id = req.params.id;
+    try {
+      const category = await Category.findOneAndDelete(
+        {
+          _id: id,
+        },
+        {
+          new: true,
+        }
+      );
+      if (!category) {
+        throw new Error("something went wrong");
+      }
+
+      return res.json({
+        success: true,
+        message: "Category is deleted..",
+      });
+    } catch (error) {
+      return res.json({
+        success: false,
+        error: error.message,
+      });
+    }
+  };
+
+  static getEditForm = (req, res) => {
+    res.render("category/edit_category.ejs");
+  };
+
+  static editCategory = async (req, res) => {
+    const id = req.params.id;
+    const data = {
+      category: req.body.category,
+      categoryImgUrl: req.body.categoryImgUrl,
+    };
+    try {
+      const updated = await Category.findOneAndUpdate(
+        {
+          _id: id,
+        },
+        {
+          data,
+        },
+        {
+          new: true,
+        }
+      );
+
+      console.log(updated);
+
+      return res.json({
+        success: true,
+        message: "Successfully updated..",
+      });
+    } catch (error) {
+      return res.json({
+        success: false,
+        error: error.message,
       });
     }
   };

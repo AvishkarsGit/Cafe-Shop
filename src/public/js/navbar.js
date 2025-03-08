@@ -7,7 +7,7 @@ const cartBtn = document.getElementById("cart");
 const profileBtn = document.getElementById("profile");
 const productBtn = document.getElementById("add-product");
 const categoryBtn = document.getElementById("add-category");
-
+ 
 checkRoutes = () => {
   const currentPath = window.location.pathname;
   switch (currentPath) {
@@ -47,7 +47,15 @@ checkRoutes = () => {
       productBtn.style.backgroundColor = "rgba(228, 25, 89, 0.847)";
       productBtn.style.color = "white";
       break;
-    case "/category/new":
+    case "/category":
+      categoryBtn.style.backgroundColor = "rgba(228, 25, 89, 0.847)";
+      categoryBtn.style.color = "white";
+      break;
+    case "/category/create":
+      categoryBtn.style.backgroundColor = "rgba(228, 25, 89, 0.847)";
+      categoryBtn.style.color = "white";
+      break;
+    case "/category/edit/:id":
       categoryBtn.style.backgroundColor = "rgba(228, 25, 89, 0.847)";
       categoryBtn.style.color = "white";
       break;
@@ -121,7 +129,7 @@ if (productBtn) {
 if (categoryBtn) {
   categoryBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    location.assign("/category/new");
+    location.assign("/category");
   });
 }
 

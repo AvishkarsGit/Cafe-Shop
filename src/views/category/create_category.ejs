@@ -1,0 +1,27 @@
+<% layout("layouts/boilerplate.ejs") %>
+<body>
+  <div class="back-arrow-div">
+    <i class="ri-arrow-left-fill" id="back-arrow"></i>
+  </div>
+  <form action="/category/create" method="post" id="category-form">
+    <h3 id="title">Add a new category</h3>
+    <input
+      type="text"
+      placeholder="Enter new category (e.g. Pizza)"
+      name="category"
+      id="category"
+    />
+    <input
+      type="text"
+      placeholder="Enter category image url"
+      name="categoryImgUrl"
+      id="categoryImg"
+    />
+
+    <div class="btn">
+      <button id="save-category">Save</button>
+    </div>
+  </form>
+
+  <script src="/js/create_category.js"></script>
+</body>
