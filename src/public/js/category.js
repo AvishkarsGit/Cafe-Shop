@@ -11,18 +11,19 @@ async function appendCategory() {
   const categories = data.categories;
 
   for (let item of categories) {
-    addCategoriesUI(item.category, item._id);
+    addCategoriesUI(item.category, item._id, item.categoryImgUrl);
   }
 }
 
 appendCategory();
 
-function addCategoriesUI(category, id) {
+function addCategoriesUI(category, id, imgUrl) {
   const categoryRow = document.createElement("div");
   const subContainer = document.querySelector(".sub-container");
 
   categoryRow.className = "category-row";
   categoryRow.innerHTML = `
+      <img src='${imgUrl}' alt="category" class="categoryImg"/>
       <p class="category-name" id='${id}'>${category}</p>
             <div class="category-icons">
             <i class="ri-edit-box-line edit" id="${id}"></i>

@@ -71,30 +71,29 @@ class CategoryController {
     }
   };
 
-  static getEditForm = (req, res) => {
-    res.render("category/edit_category.ejs");
+  static getEditForm = async (req, res) => {
+    const id = req.params.id;
+    const category = await Category.findOne({ _id: id });
+
+    res.render("category/edit_category.ejs", { category });
   };
 
   static editCategory = async (req, res) => {
     const id = req.params.id;
-    const data = {
-      category: req.body.category,
-      categoryImgUrl: req.body.categoryImgUrl,
-    };
+    const { category, categoryImgUrl } = req.body;
     try {
-      const updated = await Category.findOneAndUpdate(
+      await Category.findOneAndUpdate(
         {
           _id: id,
         },
         {
-          data,
+          category,
+          categoryImgUrl,
         },
         {
           new: true,
         }
       );
-
-      console.log(updated);
 
       return res.json({
         success: true,

@@ -62,6 +62,11 @@
 .category-name {
   margin-left: 16px;
 }
+.categoryImg {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
 .back-arrow-div {
   height: 30px;
   width: 30px;

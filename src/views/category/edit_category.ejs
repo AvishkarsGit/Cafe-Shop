@@ -3,24 +3,35 @@
   <div class="back-arrow-div">
     <i class="ri-arrow-left-fill" id="back-arrow"></i>
   </div>
-  <form action="/category/create" method="post" id="category-form">
+  <form
+    action="/category/edit/<%= category._id  %>"
+    method="post"
+    id="category-edit-form"
+  >
     <h3 id="title">Edit category</h3>
     <input
       type="text"
       placeholder="Enter new category (e.g. Pizza)"
       name="category"
       id="category"
+      value="<%= category.category  %>"
     />
     <input
       type="text"
       placeholder="Enter category image url"
       name="categoryImgUrl"
       id="categoryImg"
+      value="<%= category.categoryImgUrl  %>"
     />
 
     <div class="btn">
-      <button id="edit-category">Edit</button>
+      <button
+        id="edit-category"
+        onclick="editCategory(event,'<%= category._id %>')"
+      >
+        Edit
+      </button>
     </div>
   </form>
-  <script src="/js/create_category.js"></script>
+  <script src="/js/edit_category.js"></script>
 </body>
