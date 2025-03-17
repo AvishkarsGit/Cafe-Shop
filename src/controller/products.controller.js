@@ -31,6 +31,8 @@ class ProductController {
         cloudinaryId,
       });
 
+      console.log(product);
+
       res.redirect("/products/read");
     } catch (error) {
       console.error("Error adding product:", error);

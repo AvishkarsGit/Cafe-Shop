@@ -5,8 +5,8 @@ const cloudinary = require("./cloudinary");
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: "product_images", // Cloudinary folder
-    format: async (req, file) => "png"||"jpeg", // Convert all images to PNG
+    folder: "cafeShop", // Cloudinary folder
+    allowedFormat: ["png", "jpg", "jpeg"], // Convert all images to PNG
     public_id: (req, file) => Date.now() + "-" + file.originalname,
   },
 });
