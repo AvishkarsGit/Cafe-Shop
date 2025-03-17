@@ -30,8 +30,8 @@ productForm.addEventListener("submit", async (e) => {
     showErrorAlert("Enter product description");
     return;
   }
-  if (productData.imgUrl.trim() === "") {
-    showErrorAlert("Enter product img url");
+  if (!productData.imgUrl) {
+    showErrorAlert("choose product image");
     return;
   }
   if (
@@ -43,7 +43,7 @@ productForm.addEventListener("submit", async (e) => {
   }
   try {
     const response = await axios.post("/products/create", productData, {
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "multipart/form-data" },
     });
 
     if (response.data.success) {

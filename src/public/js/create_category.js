@@ -6,31 +6,29 @@ backArrow.addEventListener("click", (e) => {
   window.location.replace("/category");
 });
 
-categoryForm.addEventListener("submit", (e) => {
+categoryForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const categoryAddBtn = document.getElementById("save-category");
-  categoryAddBtn.addEventListener("click", async (e) => {
-    e.preventDefault();
-    const formData = new FormData(categoryForm);
 
-    const categoryData = {
-      category: formData.get("category"),
-      categoryImgUrl: formData.get("categoryImgUrl"),
-    };
+  const formData = new FormData(categoryForm);
 
-    try {
-      const response = await axios.post("/category/create", categoryData, {
-        headers: { "Content-Type": "application/json" },
-      });
+  // const categoryData = {
+  //   category: formData.get("category"),
+  //   categoryImgUrl: formData.get("categoryImgUrl"),
+  // };
 
-      if (response.data.success) {
-        showSuccessAlert(response.data.message, "Please wait...");
-        setTimeout(() => {
-          window.location.replace("/category");
-        }, 5000);
-      }
-    } catch (error) {
-      showErrorAlert(error.response.data.message);
+  try {
+    const response = await axios.post("/category/create", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    if (response.data.success) {
+      showSuccessAlert(response.data.message, "Please wait...");
+      setTimeout(() => {
+        window.location.replace("/category");
+      }, 5000);
     }
-  });
+  } catch (error) {
+    showErrorAlert(error.response.data.message);
+  }
 });

@@ -3,7 +3,12 @@
   <div class="back-arrow-div">
     <i class="ri-arrow-left-fill" id="back-arrow"></i>
   </div>
-  <form action="/category/create" method="post" id="category-form">
+  <form
+    action="/category/create"
+    method="post"
+    id="category-form"
+    enctype="multipart/form-data"
+  >
     <h3 id="title">Add a new category</h3>
     <input
       type="text"
@@ -11,12 +16,7 @@
       name="category"
       id="category"
     />
-    <input
-      type="file"
-      placeholder="Enter category image url"
-      name="categoryImgUrl"
-      id="categoryImg"
-    />
+    <input type="file" name="categoryImgUrl" id="categoryImg" />
 
     <div class="btn">
       <button id="save-category">Save</button>

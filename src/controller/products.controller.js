@@ -11,6 +11,7 @@ class ProductController {
       res.status(500).send("Server Error");
     }
   };
+  
 
   static addProduct = async (req, res) => {
     try {

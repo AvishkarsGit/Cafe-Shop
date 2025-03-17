@@ -6,9 +6,14 @@ class CategoryController {
   };
   static addCategory = async (req, res) => {
     try {
+      const url = req.file ? req.file.path : null;
+
+      console.log(url);
+      const cloudinaryId = req.file ? req.file.filename : null;
+
       const data = {
         category: req.body.category,
-        categoryImgUrl: req.body.categoryImgUrl,
+        categoryImgUrl: url,
       };
 
       const cat = await new Category(data).save();
