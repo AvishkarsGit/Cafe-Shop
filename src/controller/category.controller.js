@@ -8,7 +8,6 @@ class CategoryController {
     try {
       const url = req.file ? req.file.path : null;
 
-      console.log(url);
       const cloudinaryId = req.file ? req.file.filename : null;
 
       const data = {

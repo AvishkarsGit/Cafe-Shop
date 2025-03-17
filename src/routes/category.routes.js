@@ -15,7 +15,7 @@ router.route("/").get(CategoryController.getCategoryPage);
 router
   .route("/create")
   .get(CategoryController.getCategoryForm)
-  .post(CategoryController.addCategory);
+  .post(upload.single("image"), CategoryController.addCategory);
 
 router.route("/categories").get(CategoryController.allCategories);
 
