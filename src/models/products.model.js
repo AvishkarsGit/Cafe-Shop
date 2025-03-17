@@ -13,7 +13,10 @@ const productModel = mongoose.Schema({
     type: String,
   },
   imgUrl: {
-    type: String,
+    type: String, // Cloudinary URL
+  },
+  cloudinaryId: {
+    type: String, // Cloudinary public_id
   },
 });
 

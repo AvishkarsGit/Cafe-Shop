@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Server Side Rendering</title>
+    <title>All Products</title>
     <link rel="stylesheet" href="/stylesheets/style.css">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
     <div class="w-full h-screen bg-zinc-900 p-10 text-white">
         <div class="nav mb-5">
-            <a class="text-blue-500" href="/products">Add Product</a>
+            <a class="text-blue-500" href="/">Add Product</a>
         </div>
         <h1 class="text-3xl tracking-tighter mb-3">All Products</h1>
 
@@ -19,9 +19,9 @@
             <% if (cafeproduct.length > 0) { %>
                 <% cafeproduct.forEach(function(product) { %>
                     <div class="user w-72 p-4 bg-zinc-800 rounded-lg">
-                        <!-- Fixed Image Container (150px x 150px) -->
-                        <div class="w-full h-full bg-zinc-700 rounded-lg overflow-hidden flex items-center justify-center">
-                            <img class="w-full h-full object-cover" src="/uploads/<%= product.imgUrl %>" alt="<%= product.ProductName %>">
+                        <!-- Fixed Image Container -->
+                        <div class="w-full h-40 bg-zinc-700 rounded-lg overflow-hidden flex items-center justify-center">
+                            <img class="w-full h-full object-cover" src="<%= product.imgUrl %>" alt="<%= product.ProductName %>">
                         </div>
                         
                         <!-- Product Details -->

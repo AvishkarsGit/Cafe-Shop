@@ -1,7 +1,7 @@
 const express = require("express");
 const ProductController = require("../controller/products.controller");
 const GlobalMiddleware = require("../middleware/global.middleware");
-const upload = require("../config/multer"); // Import multer
+const upload = require("../config/multer");
 
 const router = express.Router();
 
@@ -11,10 +11,10 @@ router.use(
   GlobalMiddleware.isAdmin
 );
 
-router.route("/create").post(upload.single("imgUrl"), ProductController.addProduct);
+router.route("/create").post(upload.single("image"), ProductController.addProduct);
 router.route("/read").get(ProductController.getAllProducts);
 router.route("/delete/:id").get(ProductController.deleteProduct);
 router.route("/edit/:id").get(ProductController.editProduct);
-router.route("/update/:id").post(upload.single("imgUrl"), ProductController.updateProduct);
+router.route("/update/:id").post(upload.single("image"), ProductController.updateProduct);
 
 module.exports = router;
