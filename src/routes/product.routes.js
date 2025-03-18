@@ -11,14 +11,16 @@ router.use(
   GlobalMiddleware.isAdmin
 );
 
-
 router
   .route("/create")
-  .get(ProductController.getIndexPage).post(upload.single("image"), ProductController.addProduct);
+  .get(ProductController.getIndexPage)
+  .post(upload.single("imgUrl"), ProductController.addProduct);
 
 router.route("/read").get(ProductController.getAllProducts);
 router.route("/delete/:id").get(ProductController.deleteProduct);
 router.route("/edit/:id").get(ProductController.editProduct);
-router.route("/update/:id").post(upload.single("image"), ProductController.updateProduct);
+router
+  .route("/update/:id")
+  .post(upload.single("imgUrl"), ProductController.updateProduct);
 
 module.exports = router;

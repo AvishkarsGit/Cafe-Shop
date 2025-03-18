@@ -6,7 +6,7 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: "cafeShop", // Cloudinary folder
-    format: ["png", "jpg", "jpeg"], // Convert all images to PNG
+    allowedFormats: ["png", "jpg", "jpeg"], // Convert all images to PNG
   },
 });
 

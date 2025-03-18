@@ -17,11 +17,10 @@ async function editCategory(e, id) {
     categoryImgUrl: formData.get("categoryImgUrl"),
   };
 
-  console.log("name : ", categoryData.category);
 
   try {
     const response = await axios.post(`/category/edit/${id}`, categoryData, {
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "multipart/form-data" },
     });
     if (response.data.success) {
       showSuccessAlert(response.data.message);

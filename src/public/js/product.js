@@ -30,10 +30,6 @@ productForm.addEventListener("submit", async (e) => {
     showErrorAlert("Enter product description");
     return;
   }
-  if (!productData.imgUrl) {
-    showErrorAlert("choose product image");
-    return;
-  }
   if (
     selectedValue.trim() === "" ||
     selectedValue.trim() === "Select Category"

@@ -11,11 +11,10 @@ class ProductController {
       res.status(500).send("Server Error");
     }
   };
-  
 
   static addProduct = async (req, res) => {
     try {
-      const { ProductName, ProductPrice, Description } = req.body;
+      const { ProductName, ProductPrice, Description, category } = req.body;
 
       const imgUrl = req.file ? req.file.path : null;
       const cloudinaryId = req.file ? req.file.filename : null;
@@ -29,7 +28,9 @@ class ProductController {
         Description,
         imgUrl,
         category,
+        cloudinaryId,
       });
+
       return res.json({
         success: true,
         message: "Product added successfully",
@@ -47,9 +48,7 @@ class ProductController {
   };
 
   static getAllProducts = async (req, res) => {
-    
-    try {  
-
+    try {
       res.redirect("/products/read");
     } catch (error) {
       console.error("Error adding product:", error);
@@ -65,7 +64,6 @@ class ProductController {
       console.error("Error fetching products:", error);
       res.status(500).send("Server Error");
     }
-
   };
 
   static deleteProduct = async (req, res) => {
@@ -77,21 +75,39 @@ class ProductController {
       }
 
       // Delete image from Cloudinary
-      if (product.cloudinaryId) {
-        await cloudinary.uploader.destroy(product.cloudinaryId);
-      }
+      const cloudinaryId = product.cloudinaryId;
 
-      await productData.findByIdAndDelete(req.params.id);
-      res.redirect("/products/read");
+      if (cloudinaryId) {
+        const result = await cloudinary.uploader.destroy(cloudinaryId);
+
+        if (result.result === "ok") {
+          const deleted = await productData.findOneAndDelete(
+            {
+              _id: req.params.id,
+            },
+            {
+              new: true,
+            }
+          );
+
+          return res.json({
+            success: true,
+            message: "Product deleted successfully",
+          });
+        }
+      }
     } catch (error) {
-      console.error("Error deleting product:", error);
-      res.status(500).send("Server Error");
+      return res.json({
+        success: false,
+        message: error.message,
+      });
     }
   };
 
   static editProduct = async (req, res) => {
     try {
       const product = await productData.findById(req.params.id);
+
       res.render("products/edit", { product });
     } catch (error) {
       console.error("Error fetching product:", error);
@@ -101,8 +117,7 @@ class ProductController {
 
   static updateProduct = async (req, res) => {
     try {
-
-      let { ProductName, ProductPrice, Description } = req.body;
+      let { ProductName, ProductPrice, Description, category } = req.body;
       const product = await productData.findById(req.params.id);
 
       let imgUrl = product.imgUrl;
@@ -117,17 +132,30 @@ class ProductController {
         cloudinaryId = req.file.filename;
       }
 
-      await productData.findByIdAndUpdate(
+      const updated = await productData.findByIdAndUpdate(
         req.params.id,
-        { ProductName, ProductPrice, Description, imgUrl, cloudinaryId },
+        {
+          ProductName,
+          ProductPrice,
+          Description,
+          imgUrl,
+          cloudinaryId,
+          category,
+        },
         { new: true }
       );
 
-      res.redirect("/products/read");
-    } catch (error) {
-      console.error("Error updating product:", error);
-      res.status(500).send("Server Error");
+      
 
+      return res.json({
+        success: true,
+        message: "Product is updated",
+      });
+    } catch (error) {
+      return res.json({
+        success: false,
+        message: error.message,
+      });
     }
   };
 }

@@ -1,21 +1,25 @@
-const Category = require("../models/category.model");
-
+const { Category } = require("../models/category.model.js");
+const cloudinary = require("../config/cloudinary");
 class CategoryController {
   static getCategoryPage = (req, res) => {
     res.render("category/add_category.ejs");
   };
   static addCategory = async (req, res) => {
     try {
-      const url = req.file ? req.file.path : null;
+      const { category } = req.body;
 
+      const url = req.file ? req.file.path : null;
       const cloudinaryId = req.file ? req.file.filename : null;
 
-      const data = {
-        category: req.body.category,
-        categoryImgUrl: url,
-      };
+      console.log(url);
 
-      const cat = await new Category(data).save();
+      const data = {
+        category,
+        categoryImgUrl: url,
+        cloudinaryId,
+      };
+      const cat = await Category.create(data);
+
       return res.json({
         success: true,
         message: "Category added successfully",
@@ -49,28 +53,31 @@ class CategoryController {
   };
 
   static deleteCategory = async (req, res) => {
-    const id = req.params.id;
     try {
-      const category = await Category.findOneAndDelete(
-        {
-          _id: id,
-        },
-        {
-          new: true,
-        }
-      );
-      if (!category) {
-        throw new Error("something went wrong");
-      }
+      const id = req.params.id;
+      const category = await Category.findOne({ _id: id });
 
-      return res.json({
-        success: true,
-        message: "Category is deleted..",
-      });
+      if (category.cloudinaryId) {
+        const result = await cloudinary.uploader.destroy(category.cloudinaryId);
+        if (result.result === "ok") {
+          const deleted = await Category.findOneAndDelete(
+            {
+              _id: id,
+            },
+            {
+              new: true,
+            }
+          );
+          return res.json({
+            success: true,
+            message: "Category is deleted",
+          });
+        }
+      }
     } catch (error) {
       return res.json({
         success: false,
-        error: error.message,
+        message: error.message,
       });
     }
   };
@@ -83,30 +90,37 @@ class CategoryController {
   };
 
   static editCategory = async (req, res) => {
-    const id = req.params.id;
-    const { category, categoryImgUrl } = req.body;
     try {
-      await Category.findOneAndUpdate(
-        {
-          _id: id,
-        },
-        {
-          category,
-          categoryImgUrl,
-        },
-        {
-          new: true,
+      let { category } = req.body;
+      const cat = await Category.findById(req.params.id);
+
+      let imgUrl = cat.imgUrl;
+      let cloudinaryId = cat.cloudinaryId;
+
+      if (req.file) {
+        if (cat.cloudinaryId) {
+          const data = await cloudinary.uploader.destroy(cat.cloudinaryId);
+          console.log(data);
         }
+
+        imgUrl = req.file.path;
+        cloudinaryId = req.file.filename;
+      }
+
+      await Category.findByIdAndUpdate(
+        req.params.id,
+        { category, categoryImgUrl: imgUrl, cloudinaryId },
+        { new: true }
       );
 
       return res.json({
         success: true,
-        message: "Successfully updated..",
+        message: "Product is updated",
       });
     } catch (error) {
       return res.json({
         success: false,
-        error: error.message,
+        message: error.message,
       });
     }
   };

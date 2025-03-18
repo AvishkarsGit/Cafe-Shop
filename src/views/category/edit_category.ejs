@@ -7,6 +7,7 @@
     action="/category/edit/<%= category._id  %>"
     method="post"
     id="category-edit-form"
+    enctype="multipart/form-data"
   >
     <h3 id="title">Edit category</h3>
     <input
@@ -16,13 +17,11 @@
       id="category"
       value="<%= category.category  %>"
     />
-    <input
-      type="text"
-      placeholder="Enter category image url"
-      name="categoryImgUrl"
-      id="categoryImg"
-      value="<%= category.categoryImgUrl  %>"
-    />
+
+    <div class="img-div">
+      <img src="<%= category.categoryImgUrl  %>" alt="" />
+      <input type="file" name="categoryImgUrl" accept="image/*" required />
+    </div>
 
     <div class="btn">
       <button

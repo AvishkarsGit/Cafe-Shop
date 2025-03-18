@@ -15,14 +15,14 @@ router.route("/").get(CategoryController.getCategoryPage);
 router
   .route("/create")
   .get(CategoryController.getCategoryForm)
-  .post(upload.single("image"), CategoryController.addCategory);
+  .post(upload.single("categoryImgUrl"), CategoryController.addCategory);
 
 router.route("/categories").get(CategoryController.allCategories);
 
 router
   .route("/edit/:id")
   .get(CategoryController.getEditForm)
-  .post(CategoryController.editCategory);
+  .post(upload.single("categoryImgUrl"), CategoryController.editCategory);
 
 router.route("/delete/:id").delete(CategoryController.deleteCategory);
 

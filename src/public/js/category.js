@@ -45,6 +45,7 @@ function addCategoriesUI(category, id, imgUrl) {
     btn.addEventListener("click", async (e) => {
       e.preventDefault();
       const id = e.target.id;
+
       try {
         const response = await axios.delete(`/category/delete/${id}`);
 

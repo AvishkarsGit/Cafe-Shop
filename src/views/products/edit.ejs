@@ -5,6 +5,7 @@
       action="/products/update/<%= product._id  %>"
       method="post"
       id="edit-form"
+      enctype="multipart/form-data"
     >
       <h1>Edit Product</h1>
       <input
@@ -28,13 +29,21 @@
         value="<%= product.Description  %>"
         id="Description"
       />
-      <input
-        name="imgUrl"
-        type="text"
-        placeholder="image Url"
-        value="<%= product.imgUrl  %>"
-        id="imgUrl"
-      />
+
+      <div class="img-div">
+        <img src="<%= product.imgUrl  %>" alt="" />
+        <input type="file" name="imgUrl" accept="image/*" required />
+      </div>
+      <div class="options">
+        <select id="categorySelect">
+          <% if (product.category) { %>
+          <option value="<%= product.category %>">
+            <%=product.category %>
+          </option>
+          <% } %>
+        </select>
+      </div>
+
       <div class="btn-update">
         <button id="update" onclick="updateProduct(event,'<%= product._id %>')">
           Update
@@ -43,10 +52,16 @@
     </form>
   </div>
   <script>
+    const select = document.getElementById("categorySelect");
+
+    appendCategories(select);
+
     async function updateProduct(event, id) {
       event.preventDefault();
       const editForm = document.getElementById("edit-form");
-      console.log(editForm);
+      const select = document.querySelector("#categorySelect");
+      const selectedValue = select.value;
+
       const formData = new FormData(editForm); // Correct way to create FormData
 
       const userData = {
@@ -54,12 +69,13 @@
         ProductPrice: formData.get("ProductPrice"),
         Description: formData.get("Description"),
         imgUrl: formData.get("imgUrl"),
+        category: selectedValue,
       };
 
       try {
-        const response = await axios.put(`/products/update/${id}`, userData, {
+        const response = await axios.post(`/products/update/${id}`, userData, {
           withCredentials: true,
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "multipart/form-data" },
         });
 
         if (response.data.success) {
@@ -70,6 +86,35 @@
         }
       } catch (error) {
         showErrorAlert(error.response.data.message);
+      }
+    }
+
+    function appendCategories(select) {
+      try {
+        axios
+          .get("/category/categories")
+          .then((response) => {
+            const categories = response.data.categories;
+            const currentCategory = "<%= product.category %>";
+
+            // Remove duplicates and prevent adding the selected category again
+            const filteredCategories = categories.filter(
+              (category) => category.category !== currentCategory
+            );
+
+            // Append the remaining categories
+            filteredCategories.forEach((category) => {
+              const option = document.createElement("option");
+              option.value = category.category;
+              option.textContent = category.category;
+              select.appendChild(option);
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } catch (error) {
+        console.log(error);
       }
     }
   </script>
