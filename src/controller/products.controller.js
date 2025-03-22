@@ -145,8 +145,6 @@ class ProductController {
         { new: true }
       );
 
-      
-
       return res.json({
         success: true,
         message: "Product is updated",

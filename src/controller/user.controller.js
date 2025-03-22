@@ -34,6 +34,7 @@ class UserController {
         verification_token,
         verification_token_time: Date.now() + JWT.MAX_TOKEN_TIME,
         email_verified: false,
+        profile: "",
       };
 
       const newUser = await new User(data).save();
@@ -55,10 +56,9 @@ class UserController {
 
       //user registered successfully
 
-
       return res.status(200).json({
         success: true,
-        message: "Your account created successfully"
+        message: "Your account created successfully",
       });
     } catch (error) {
       return res.status(400).json({

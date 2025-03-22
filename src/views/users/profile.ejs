@@ -1,4 +1,47 @@
 <% layout("layouts/boilerplate.ejs") %>
 <body>
-      <h2>Profile</h2>
+  <div class="profile-div">
+    <div class="image">
+      <% if (user.profile === '') { %>
+      <img
+        src="https://th.bing.com/th/id/R.6b0022312d41080436c52da571d5c697?rik=ejx13G9ZroRrcg&riu=http%3a%2f%2fpluspng.com%2fimg-png%2fuser-png-icon-young-user-icon-2400.png&ehk=NNF6zZUBr0n5i%2fx0Bh3AMRDRDrzslPXB0ANabkkPyv0%3d&risl=&pid=ImgRaw&r=0"
+        alt="profile_img"
+      />
+      <% } %> <% if (user.profile !== '') { %>
+      <img src="<%= user.profile  %>" alt="profile_img" />
+      <% } %>
+    </div>
+    <div>
+      <h3><%= user.name %></h3>
+      <div class="content">
+        <label for=""> Email </label>
+        <p><%= user.email %></p>
+      </div>
+      <div class="content">
+        <label for=""> Phone </label>
+        <p><%= user.phone %></p>
+      </div>
+      <div class="content">
+        <label for=""> Type </label>
+        <p style="text-transform: capitalize"><%= user.type %></p>
+      </div>
+      <div class="content">
+        <label for=""> Email verify </label>
+        <% if (user.email_verified) { %>
+        <i class="ri-verified-badge-fill"></i>
+        <% } %>
+      </div>
+      <div class="want-to-edit">
+        <button id="edit-profile-btn">Edit profile</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    const editBtn = document.getElementById("edit-profile-btn");
+    editBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const id = "<%= user._id %>";
+      window.location.assign(`/profile/edit/${id}`);
+    });
+  </script>
 </body>

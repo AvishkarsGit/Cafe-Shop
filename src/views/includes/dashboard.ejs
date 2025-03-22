@@ -1,12 +1,16 @@
 <div class="dashboard">
   <div class="profile-ui-section">
     <div class="img-circle">
+      <% if (currUser) { %> <% if (currUser.profile ==="") { %>
       <img
         src="https://th.bing.com/th/id/R.6b0022312d41080436c52da571d5c697?rik=ejx13G9ZroRrcg&riu=http%3a%2f%2fpluspng.com%2fimg-png%2fuser-png-icon-young-user-icon-2400.png&ehk=NNF6zZUBr0n5i%2fx0Bh3AMRDRDrzslPXB0ANabkkPyv0%3d&risl=&pid=ImgRaw&r=0"
         alt=""
       />
+      <% } %> <% if (currUser.profile !== ""){ %>
+      <img src="<%= currUser.profile  %>" alt="" />
+      <% } %>
     </div>
-    <% if (currUser) { %> <%= currUser.name %> <% } %>
+    <%= currUser.name %> <% } %>
   </div>
   <div class="line"></div>
   <div class="dash-links">

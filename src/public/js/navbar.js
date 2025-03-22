@@ -7,7 +7,7 @@ const cartBtn = document.getElementById("cart");
 const profileBtn = document.getElementById("profile");
 const productBtn = document.getElementById("add-product");
 const categoryBtn = document.getElementById("add-category");
- 
+
 checkRoutes = () => {
   const currentPath = window.location.pathname;
   switch (currentPath) {
@@ -93,7 +93,7 @@ if (logoutBtn) {
         }, 1500);
       }
     } catch (error) {
-      // showErrorAlert(error.response.data.message);
+      showErrorAlert(error.response.data.message);
     }
   });
 }
