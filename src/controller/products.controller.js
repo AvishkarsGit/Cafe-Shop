@@ -47,25 +47,6 @@ class ProductController {
     res.render("products/index.ejs");
   };
 
-  static getAllProducts = async (req, res) => {
-    try {
-      res.redirect("/products/read");
-    } catch (error) {
-      console.error("Error adding product:", error);
-      res.status(500).send("Server Error");
-    }
-  };
-
-  static getAllProducts = async (req, res) => {
-    try {
-      const cafeproduct = await productData.find();
-      res.render("products/read", { cafeproduct });
-    } catch (error) {
-      console.error("Error fetching products:", error);
-      res.status(500).send("Server Error");
-    }
-  };
-
   static deleteProduct = async (req, res) => {
     try {
       const product = await productData.findById(req.params.id);
@@ -148,6 +129,27 @@ class ProductController {
       return res.json({
         success: true,
         message: "Product is updated",
+      });
+    } catch (error) {
+      return res.json({
+        success: false,
+        message: error.message,
+      });
+    }
+  };
+
+  static getFilteredProducts = async (req, res) => {
+    const { category } = req.params;
+
+    try {
+      const product = await productData.find({ category });
+      if (!product) {
+        throw new Error("Not found");
+      }
+
+      return res.json({
+        success: true,
+        product,
       });
     } catch (error) {
       return res.json({

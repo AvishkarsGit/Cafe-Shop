@@ -16,11 +16,12 @@ router
   .get(ProductController.getIndexPage)
   .post(upload.single("imgUrl"), ProductController.addProduct);
 
-router.route("/read").get(ProductController.getAllProducts);
+
 router.route("/delete/:id").get(ProductController.deleteProduct);
 router.route("/edit/:id").get(ProductController.editProduct);
 router
   .route("/update/:id")
   .post(upload.single("imgUrl"), ProductController.updateProduct);
 
+router.route("/:category").get(ProductController.getFilteredProducts);
 module.exports = router;

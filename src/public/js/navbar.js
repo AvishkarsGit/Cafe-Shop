@@ -7,6 +7,7 @@ const cartBtn = document.getElementById("cart");
 const profileBtn = document.getElementById("profile");
 const productBtn = document.getElementById("add-product");
 const categoryBtn = document.getElementById("add-category");
+const dashboardDiv = document.querySelector(".dashboard");
 
 checkRoutes = () => {
   const currentPath = window.location.pathname;
@@ -14,6 +15,7 @@ checkRoutes = () => {
     case "/":
       menusBtn.style.backgroundColor = "rgba(228, 25, 89, 0.847)";
       menusBtn.style.color = "white";
+      dashboardDiv.style.height = "100%";
       break;
     case "/orders":
       orderBtn.style.backgroundColor = "rgba(228, 25, 89, 0.847)";

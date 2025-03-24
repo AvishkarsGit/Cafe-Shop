@@ -75,10 +75,24 @@ class UserController {
 
   static getHome = async (req, res) => {
     const type = req.user.type;
-    const products = await Product.find();
+
+    const productsByCategory = await Product.aggregate([
+      {
+        $group: {
+          _id: "$category", // Group by category
+          products: { $push: "$$ROOT" }, // Collect all products in an array
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          products: { $slice: ["$products", 2] }, // Take only 2 products per category
+        },
+      },
+    ]);
 
     if (type === "admin") {
-      res.render("products/all_product.ejs", { products });
+      res.render("products/all_product.ejs", { productsByCategory });
     } else {
       res.render("auth/home.ejs");
     }

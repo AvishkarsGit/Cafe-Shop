@@ -1,13 +1,23 @@
 <% layout("layouts/boilerplate.ejs") %>
 <body>
-  <div class="card-container">
-    <% if (products && products.length) { %> <% for (let product of products) {
-    %>
+  <div class="drop-down-container">
+    <div class="drop-down">
+      <p>Filter products</p>
+      <select name="" id="categorySelect">
+        <option value="All">All</option>
+      </select>
+    </div>
+  </div>
+  <div id="productContainer" class="card-container">
+    <% if (productsByCategory && productsByCategory.length) { %> <% for (let
+    category of productsByCategory) { %>
+    <!-- filter category first -->
+    <% for (let product of category.products) { %>
     <div class="card">
       <img src="<%= product.imgUrl %>" alt="product" />
       <h3><%= product.ProductName %></h3>
       <p><%= product.Description %></p>
-      <span>$ <%= product.ProductPrice %></span>
+      <span>₹ <%= product.ProductPrice %>.00</span>
       <div class="modify">
         <button id="edit" onclick="editProduct('<%= product._id %>')">
           Edit
@@ -17,10 +27,19 @@
         </button>
       </div>
     </div>
-    <% } %> <% } %>
+    <% } %> <% } %> <% } %>
   </div>
 
   <script>
+    const select = document.getElementById("categorySelect");
+    appendCategories(select);
+
+    select.addEventListener("change", async (e) => {
+      e.preventDefault();
+      const selectedValue = select.value;
+      await filteredProducts(selectedValue);
+    });
+
     async function deleteProduct(id) {
       try {
         const response = await axios.get(`/products/delete/${id}`);
@@ -38,6 +57,66 @@
 
     function editProduct(id) {
       location.assign(`/products/edit/${id}`);
+    }
+
+    function appendCategories(select) {
+      try {
+        axios
+          .get("/category/categories")
+          .then((response) => {
+            const categories = response.data.categories;
+            for (let category of categories) {
+              const option = document.createElement("option");
+              option.value = category.category;
+              option.textContent = category.category;
+              select.appendChild(option);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    async function filteredProducts(selectedValue) {
+      try {
+        if (selectedValue === "All") {
+          window.location.reload();
+        } else {
+          const response = await axios.get(`/products/${selectedValue}`);
+
+          if (response.data.success) {
+            const productContainerDiv =
+              document.getElementById("productContainer");
+            productContainerDiv.innerHTML = "";
+
+            const products = response.data.product;
+            for (let product of products) {
+              const productCard = `
+              <div class="card">
+                <img src="${product.imgUrl}" alt="product" />
+                <h3>${product.ProductName}</h3>
+                <p>${product.Description}</p>
+                <span>₹ ${product.ProductPrice}.00</span>
+                <div class="modify">
+                  <button id="edit" onclick="editProduct('${product._id}')">
+                    Edit
+                  </button>
+                  <button id="delete" onclick="deleteProduct('${product._id}')">
+                    Delete
+                  </button>
+                </div>
+              </div>`;
+
+              productContainerDiv.innerHTML += productCard;
+            }
+          }
+        }
+      } catch (error) {
+        showErrorAlert(response.data.error.message);
+      }
     }
   </script>
 </body>
