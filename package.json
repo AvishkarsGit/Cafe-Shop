@@ -4,14 +4,17 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon src/app.js"
+    "start": "nodemon src/app.js",
+    "build:css": "postcss src/public/css/input.css -o src/public/css/output.css ",
+    "watch:css": "postcss src/public/css/input.css -o src/public/css/output.css --watch"
   },
   "keywords": [],
   "author": "Avishkar Kumbhar",
   "license": "ISC",
   "dependencies": {
     "@sendgrid/mail": "^8.1.4",
-    "@tailwindcss/cli": "^4.0.6",
+    "@tailwindcss/cli": "^4.0.15",
+    "@tailwindcss/postcss": "^4.0.15",
     "axios": "^1.7.9",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.41.3",
@@ -30,11 +33,14 @@
     "multer-storage-cloudinary": "^4.0.0",
     "nodemailer": "^6.10.0",
     "nodemailer-sendgrid-transport": "^0.2.0",
-    "redis": "^4.7.0",
-    "tailwindcss": "^4.0.6"
+    "redis": "^4.7.0"
   },
   "devDependencies": {
+    "autoprefixer": "^10.4.21",
     "dotenv": "^16.4.7",
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "postcss": "^8.5.3",
+    "postcss-cli": "^11.0.1",
+    "tailwindcss": "^4.0.15"
   }
 }
