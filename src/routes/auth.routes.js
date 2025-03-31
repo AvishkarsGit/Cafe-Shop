@@ -4,6 +4,7 @@ const AuthValidator = require("../validator/auth.validator.js");
 const GlobalMiddleware = require("../middleware/global.middleware.js");
 const router = express.Router();
 
+
 router
   .route("/register")
   .get(UserController.getRegister)
@@ -30,7 +31,7 @@ router
 
 router
   .route("/logout")
-  .post(GlobalMiddleware.isLoggedIn, UserController.logout);
+  .get(GlobalMiddleware.isLoggedIn, UserController.logout);
 
 router.route("/forgot-password").get(UserController.getForgotPassword);
 

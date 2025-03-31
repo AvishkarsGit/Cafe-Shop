@@ -23,7 +23,7 @@ class GlobalMiddleware {
       next();
     } catch (error) {
       req.flash("error", error.message);
-      return res.redirect(`/auth/login`);
+      return res.redirect(`/home`);
     }
   };
 

@@ -1,5 +1,6 @@
 const User = require("../models/user.model");
 const cloudinary = require("../config/cloudinary.js");
+const { Category } = require("../models/category.model");
 
 class HomeController {
   static getOrders = (req, res) => {
@@ -70,6 +71,15 @@ class HomeController {
         success: false,
         message: error.message,
       });
+    }
+  };
+
+  static getHomePage = async (req, res) => {
+    try {
+      const categories = await Category.find();
+      res.render("auth/home.ejs", { categories });
+    } catch (error) {
+      console.log(error);
     }
   };
 }

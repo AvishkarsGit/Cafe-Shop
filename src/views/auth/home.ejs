@@ -1,11 +1,136 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home</title>
-  </head>
-  <body>
-    home
-  </body>
-</html>
+<% layout("layouts/partials.ejs") %>
+<body class="!h-[100vh] !bg-white">
+  <!-- banner section -->
+
+  <section>
+    <div
+      class="h-[450px] bg-[url('/assets/Banner.png')] bg-center bg-cover !m-[10px] rounded-2xl"
+    >
+      <div
+        class="h-full w-full bg-[rgba(0,0,0,0.7)] flex items-center justify-center rounded-2xl"
+      >
+        <div class="text-center !px-4 md:!px-8">
+          <h1
+            class="text-white text-[30px] md:text-5xl font-bold tracking-wide"
+          >
+            A Freshly brewed !..
+          </h1>
+          <h1
+            class="text-[var(--color-primary)] text-3xl md:text-5xl font-bold tracking-wide"
+          >
+            Healthy to eat..
+          </h1>
+          <p
+            class="text-white max-w-[90%] md:max-w-[480px] font-medium !mt-3 text-sm md:text-base"
+          >
+            Welcome to
+            <span class="text-[var(--color-primary)] font-semibold">
+              Raje’s Cafe,</span
+            >
+            where taste meets tradition! Enjoy freshly brewed coffee, delicious
+            pizzas, burgers, sandwiches, crispy fries, and refreshing cold
+            drinks in a cozy, inviting atmosphere. Perfect for food lovers!
+          </p>
+          <button
+            class="bg-red-800 !px-6 !py-2 md:!px-8 md:!py-3 !mt-4 text-white font-semibold shadow-[0px_0px_5px_rgba(255,255,255,0.8)] rounded-md hover:cursor-pointer hover:bg-green-700"
+          >
+            Get Subscription
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories section -->
+  <section class="!mt-6">
+    <!-- title -->
+    <div class="flex items-center justify-center">
+      <h1
+        class="bg-[var(--color-danger)] text-[22px] font-bold uppercase text-[white] underline decoration-solid relative !px-4 !py-2"
+        style="
+          clip-path: polygon(
+            10% 0%,
+            90% 0%,
+            100% 30%,
+            100% 70%,
+            90% 100%,
+            10% 100%,
+            0% 70%,
+            0% 30%
+          );
+        "
+      >
+        Categories
+      </h1>
+    </div>
+
+    <!-- cards -->
+    <!-- main div -->
+    <div
+      class="swiper mySwiper !my-5 !p-5 w-full max-w-[1170px] mx-auto flex justify-center"
+    >
+      <div class="swiper-wrapper">
+        <% if (categories && categories.length) { %>
+        <!--  -->
+        <% for(let category of categories) { %>
+        <div class="swiper-slide flex flex-col items-center">
+          <div
+            class="w-[100px] sm:w-[110px] md:w-[120px] !p-2 hover:cursor-pointer rounded-[10px] transition-all duration-300 ease-in-out transform hover:scale-105"
+          >
+            <div
+              class="h-[120px] flex flex-col items-center justify-center !p-2 shadow-[0px_0px_5px_rgba(0,0,0,0.3)] rounded-[10px]"
+            >
+              <img
+                src="<%= category.categoryImgUrl %>"
+                class="h-[60px] w-[60px] sm:h-[70px] sm:w-[70px] rounded-full object-cover"
+                alt="category"
+              />
+              <span
+                class="font-semibold text-[12px] sm:text-[14px] text-center mt-2"
+              >
+                <%= category.category %>
+              </span>
+            </div>
+          </div>
+        </div>
+        <% } %>
+        <!-- -->
+        <% } %>
+      </div>
+
+      <!-- Navigation buttons -->
+      <div class="flex items-center justify-center gap-5 !my-5">
+        <button
+          class="arrow-left bg-[var(--color-primary)] h-[30px] w-[30px] rounded-full flex items-center justify-center text-white font-medium text-xl hover:bg-[var(--color-black-third)] hover:cursor-pointer"
+        >
+          <i class="ri-arrow-left-line"></i>
+        </button>
+        <button
+          class="arrow-right bg-[var(--color-primary)] h-[30px] w-[30px] rounded-full flex items-center justify-center text-white font-medium text-xl hover:bg-[var(--color-black-third)] hover:cursor-pointer"
+        >
+          <i class="ri-arrow-right-line"></i>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <!-- Initialize Swiper -->
+  <script>
+    var swiper = new Swiper(".mySwiper", {
+      slidesPerView: 3, // Always show 3 slides
+      spaceBetween: 15,
+      navigation: {
+        nextEl: ".arrow-right",
+        prevEl: ".arrow-left",
+      },
+      breakpoints: {
+        480: { slidesPerView: 4, spaceBetween: 10 }, // Small screens
+        768: { slidesPerView: 5, spaceBetween: 15 }, // Tablets
+        1024: { slidesPerView: 7, spaceBetween: 20 }, // Larger screens
+      },
+    });
+  </script>
+</body>

@@ -1,5 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@200..700&display=swap");
 
 :root {
   --color-primary: #fc3254;
@@ -11,6 +13,9 @@
   --color-black-third: #292929;
   --color-nav-bg: #444444;
   --color-light: #f2f2f2;
+
+  /* fonts */
+  --font-heading: "Oswald", sans-serif;
 }
 
 * {
@@ -44,4 +49,25 @@ form input {
   font-size: 1rem;
   font-weight: 500;
   outline: none;
+}
+
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }

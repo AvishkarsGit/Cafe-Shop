@@ -1,0 +1,12 @@
+<nav>
+  <ul>
+    <% if (user) { %>
+    <li><a href=""><%= user.name %></a></li>
+    <li><a href="/user/logout">Logout</a></li>
+    <% } %> <% if (!user) { %>
+    <li><a href="/user/login">Login</a></li>
+    <li><a href="/user/register">Signup</a></li>
+    <% } %>
+  </ul>
+</nav>
+x

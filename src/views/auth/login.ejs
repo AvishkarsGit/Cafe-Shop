@@ -1,60 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
+<% layout("layouts/partials.ejs") %>
+<body>
+  <div class="form">
+    <form action="/auth/login" method="post" id="login-form">
+      <div class="heading">
+        <h2>Login into your account</h2>
+      </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+      <div class="email-field">
+        <input
+          type="email"
+          placeholder="enter email"
+          name="email"
+          required
+          id="email"
+        />
+      </div>
 
-    <link rel="stylesheet" href="/css/index.css" />
-    <link rel="stylesheet" href="/css/login.css" />
-  </head>
-  <body>
-    <div class="form">
-      <form action="/auth/login" method="post" id="login-form">
-        <div class="heading">
-          <h2>Login into your account</h2>
-        </div>
+      <div class="password-field">
+        <input
+          type="password"
+          placeholder="enter password"
+          name="password"
+          required
+          id="password"
+        />
+      </div>
 
-        <div class="email-field">
-          <input
-            type="email"
-            placeholder="enter email"
-            name="email"
-            required
-            id="email"
-          />
-        </div>
+      <div class="forgot-pass">
+        <a href=""><p id="forgot-btn">Forgot Password?</p></a>
+      </div>
 
-        <div class="password-field">
-          <input
-            type="password"
-            placeholder="enter password"
-            name="password"
-            required
-            id="password"
-          />
-        </div>
+      <div class="btn">
+        <button>Sign in</button>
+      </div>
 
-        <div class="forgot-pass">
-          <a href=""><p id="forgot-btn">Forgot Password?</p></a>
-        </div>
+      <div class="signup-form">
+        <p>New user ? <span id="signup-btn">Signup</span></p>
+      </div>
+    </form>
+  </div>
 
-        <div class="btn">
-          <button>Sign in</button>
-        </div>
+  <!-- sweet alert -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-        <div class="signup-form">
-          <p>New user ? <span id="signup-btn">Signup</span></p>
-        </div>
-      </form>
-    </div>
-
-    <!-- sweet alert -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <script src="/js/index.js"></script>
-    <script src="/js/login.js"></script>
-  </body>
-</html>
+  <script src="/js/index.js"></script>
+  <script src="/js/login.js"></script>
+</body>

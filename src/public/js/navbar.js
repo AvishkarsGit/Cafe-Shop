@@ -86,13 +86,13 @@ if (logoutBtn) {
   logoutBtn.addEventListener("click", async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/auth/logout", {
+      const response = await axios.get("/auth/logout", {
         withCredentials: true,
       });
       if (response.data.success) {
         setTimeout(() => {
           window.location.reload();
-        }, 1500);
+        }, 1000);
       }
     } catch (error) {
       showErrorAlert(error.response.data.message);
