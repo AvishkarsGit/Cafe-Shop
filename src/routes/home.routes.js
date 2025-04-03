@@ -3,6 +3,7 @@ const UserController = require("../controller/user.controller.js");
 const GlobalMiddleware = require("../middleware/global.middleware.js");
 const HomeController = require("../controller/home.controller.js");
 const upload = require("../config/multer.js");
+const CartController = require("../controller/cart.controller.js");
 const router = express.Router();
 
 router.route("/home").get(HomeController.getHomePage);
@@ -18,7 +19,7 @@ router.route("/").get(UserController.getHome);
 
 router.route("/orders").get(HomeController.getOrders);
 
-router.route("/cart").get(HomeController.getCart);
+router.route("/getCart").get(HomeController.getCart);
 router.route("/profile").get(HomeController.getProfile);
 
 router

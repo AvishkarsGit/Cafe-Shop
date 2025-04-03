@@ -19,6 +19,8 @@ const userRouter = require("./routes/auth.routes.js");
 const homeRouter = require("./routes/home.routes.js");
 const productRouter = require("./routes/product.routes.js");
 const categoryRouter = require("./routes/category.routes.js");
+const cartRouter = require("./routes/cart.routes.js");
+
 const GlobalMiddleware = require("./middleware/global.middleware.js");
 
 // config important
@@ -70,4 +72,5 @@ app.use((req, res, next) => {
 app.use("/auth", userRouter);
 app.use("/products", productRouter);
 app.use("/category", categoryRouter);
+app.use("/cart", cartRouter);
 app.use("/", homeRouter);

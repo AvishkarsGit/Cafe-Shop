@@ -46,7 +46,7 @@
     <!-- title -->
     <div class="flex items-center justify-center">
       <h1
-        class="bg-[var(--color-danger)] text-[22px] font-bold uppercase text-[white] underline decoration-solid relative !px-4 !py-2"
+        class="bg-[var(--color-danger)] text-[22px] font-bold uppercase text-[white] relative !px-4 !py-2"
         style="
           clip-path: polygon(
             10% 0%,
@@ -65,7 +65,6 @@
     </div>
 
     <!-- cards -->
-    <!-- main div -->
     <div
       class="swiper mySwiper !my-5 !p-5 w-full max-w-[1170px] mx-auto flex justify-center"
     >
@@ -114,8 +113,96 @@
     </div>
   </section>
 
+  <!-- Top Products section -->
+
+  <section>
+    <!-- title -->
+    <div class="flex items-center justify-center !pb-5">
+      <h1
+        class="bg-[var(--color-danger)] text-[18px] font-bold uppercase text-[white] relative !px-4 !py-2"
+        style="
+          clip-path: polygon(
+            10% 0%,
+            90% 0%,
+            100% 30%,
+            100% 70%,
+            90% 100%,
+            10% 100%,
+            0% 70%,
+            0% 30%
+          );
+        "
+      >
+        Top Products
+      </h1>
+    </div>
+
+    <!-- products card -->
+    <div
+      class="flex flex-wrap justify-center gap-4 lg:!mx-5 lg:!p-2 sm:!mx-3 sm:!p-1 !mx-1 !p-1"
+    >
+      <% if (productsByCategory && productsByCategory.length) { %> <% for (let
+      category of productsByCategory) { %> <% for (let product of
+      category.products) { %>
+
+      <div
+        id="cards"
+        class="w-[300px] bg-[#fefdfd] shadow-[0px_0px_5px_rgba(0,0,0,0.3)] !m-3 rounded-[10px] transition-transform duration-900 hover:scale-105"
+      >
+        <img
+          src="<%= product.imgUrl  %>"
+          class="h-[260px] w-full shadow-md bg-black rounded-t-[10px] object-cover"
+          alt="product"
+        />
+        <h1 class="font-bold text-[19px] !my-2 text-center">
+          <%= product.ProductName %>
+        </h1>
+        <div class="h-[40px] !px-3">
+          <p class="font-semibold text-gray-900 text-[15px] text-center">
+            <%= product.Description.split(' ').length > 9 ?
+            product.Description.split(' ').slice(0, 9).join(' ') + '. . .' :
+            product.Description %>
+          </p>
+        </div>
+        <div class="flex items-center justify-between !px-4 !py-3">
+          <span class="text-[var(--color-success)] font-semibold text-[19px]">
+            ₹ <%= product.ProductPrice %>.00
+          </span>
+          <div>
+            <button
+              id="<%= product._id %>"
+              class="bg-[var(--color-primary)] !p-[5px_17px] rounded-xl font-semibold text-white hover:cursor-pointer hover:bg-[var(--color-success)] btn-add"
+            >
+              Add To Cart
+            </button>
+            <div
+              id="<%= product._id%>"
+              class="hidden items-center gap-4 qty-div"
+            >
+              <button
+                id="qty-minus"
+                class="bg-[var(--color-primary)] w-[25px] h-[25px] rounded-full text-white font-semibold text-[19px] flex items-center justify-center hover:cursor-pointer"
+              >
+                -
+              </button>
+              <span id="qty" class="font-semibold text-[20px]">1</span>
+              <button
+                id="qty-add"
+                class="bg-[var(--color-primary)] w-[25px] h-[25px] rounded-full text-white font-semibold text-[19px] flex items-center justify-center hover:cursor-pointer"
+              >
+                +
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% } %> <% } %> <% } %>
+    </div>
+  </section>
+
   <!-- Swiper JS -->
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="/js/cart.js"></script>
 
   <!-- Initialize Swiper -->
   <script>

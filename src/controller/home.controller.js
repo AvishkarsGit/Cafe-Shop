@@ -1,7 +1,7 @@
 const User = require("../models/user.model");
 const cloudinary = require("../config/cloudinary.js");
 const { Category } = require("../models/category.model");
-
+const Product = require("../models/products.model.js");
 class HomeController {
   static getOrders = (req, res) => {
     res.render("users/orders.ejs");
@@ -77,7 +77,23 @@ class HomeController {
   static getHomePage = async (req, res) => {
     try {
       const categories = await Category.find();
-      res.render("auth/home.ejs", { categories });
+
+      const productsByCategory = await Product.aggregate([
+        {
+          $group: {
+            _id: "$category", // Group by category
+            products: { $push: "$$ROOT" }, // Collect all products in an array
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            products: { $slice: ["$products", 2] }, // Take only 2 products per category
+          },
+        },
+      ]);
+
+      res.render("auth/home.ejs", { categories, productsByCategory });
     } catch (error) {
       console.log(error);
     }

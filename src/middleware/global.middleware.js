@@ -14,16 +14,27 @@ class GlobalMiddleware {
 
       const decoded = await JWT.jwtVerifyAccessToken(accessToken);
 
-      req.user = decoded;
+      // Find the user based on decoded token
+      const user = await User.findById(decoded._id);
 
-      const user = await User.findOne({ _id: decoded._id });
+      // If user is not found, return an error
+      if (!user) {
+        throw new Error("User not found. Please log in again.");
+      }
 
-      res.locals.currUser = user;
+      req.user = user; // Assign full user object
+      res.locals.currUser = user; // Store user data for EJS templates
 
       next();
     } catch (error) {
-      req.flash("error", error.message);
-      return res.redirect(`/home`);
+      if (req.xhr || req.headers.accept.indexOf("json") > -1) {
+        return res
+          .status(401)
+          .json({ success: false, message: "You need to login first" });
+      } else {
+        req.flash("error", error.message);
+        return res.redirect(`/home`);
+      }
     }
   };
 

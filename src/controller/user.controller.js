@@ -6,6 +6,7 @@ require("dotenv").config();
 
 const Redis = require("../utils/Redis.js");
 const { Category } = require("../models/category.model.js");
+const productsModel = require("../models/products.model.js");
 
 class UserController {
   static getRegister = (req, res) => {
@@ -78,6 +79,7 @@ class UserController {
     const type = req.user.type;
 
     const categories = await Category.find();
+
     const productsByCategory = await Product.aggregate([
       {
         $group: {
@@ -96,7 +98,7 @@ class UserController {
     if (type === "admin") {
       res.render("products/all_product.ejs", { productsByCategory });
     } else {
-      res.render("auth/home.ejs", { categories });
+      res.render("auth/home.ejs", { categories, productsByCategory });
     }
   };
 

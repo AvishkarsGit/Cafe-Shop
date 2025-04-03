@@ -21,7 +21,7 @@ checkRoutes = () => {
       orderBtn.style.backgroundColor = "rgba(228, 25, 89, 0.847)";
       orderBtn.style.color = "white";
       break;
-    case "/cart":
+    case "/getCart":
       cartBtn.style.backgroundColor = "rgba(228, 25, 89, 0.847)";
       cartBtn.style.color = "white";
       break;
@@ -49,7 +49,7 @@ checkRoutes = () => {
       productBtn.style.backgroundColor = "rgba(228, 25, 89, 0.847)";
       productBtn.style.color = "white";
       break;
-    case "/category":
+    case "/category": 
       categoryBtn.style.backgroundColor = "rgba(228, 25, 89, 0.847)";
       categoryBtn.style.color = "white";
       break;
