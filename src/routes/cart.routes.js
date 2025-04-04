@@ -9,4 +9,15 @@ router
   .route("/add")
   .post(GlobalMiddleware.isLoggedIn, CartController.addToCart);
 
+router
+  .route("/fetch")
+  .get(GlobalMiddleware.isLoggedIn, CartController.fetchCart);
+
+router
+  .route("/updateCart")
+  .post(GlobalMiddleware.isLoggedIn, CartController.addQty);
+
+router
+  .route("/removeFromCart")
+  .post(GlobalMiddleware.isLoggedIn, CartController.minusQty);
 module.exports = router;
