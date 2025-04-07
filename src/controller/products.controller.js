@@ -25,6 +25,7 @@ class ProductController {
       const product = await productData.create({
         ProductName,
         ProductPrice,
+        updatedProductPrice: ProductPrice,
         Description,
         imgUrl,
         category,

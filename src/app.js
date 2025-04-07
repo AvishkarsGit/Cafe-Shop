@@ -1,15 +1,25 @@
 const express = require("express");
 require("dotenv").config();
 const DB = require("./database/db.connect.js");
-const Redis = require("./utils/Redis.js");
+const http = require("http");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const flash = require("connect-flash");
 const cors = require("cors");
 const engine = require("ejs-mate");
+const { Server } = require("socket.io");
+
 const app = express();
-const PORT = 4000;
+const server = http.createServer(app);
+const io = new Server(server);
+
+//io connection
+io.on("connection", (client) => {
+  client.on("cart-count", (count) => {
+    io.emit("cart-item-count", count);
+  });
+});
 
 //config port
 const port = process.env.PORT || 4000;
@@ -52,7 +62,7 @@ app.use(flash());
 // connect database
 DB.dbConnect()
   .then((res) => {
-    app.listen(port, () => {
+    server.listen(port, () => {
       console.log(`http://localhost:${port}/`);
       console.log(`Database connected`);
     });

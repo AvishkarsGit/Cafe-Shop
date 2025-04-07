@@ -20,4 +20,9 @@ router
 router
   .route("/removeFromCart")
   .post(GlobalMiddleware.isLoggedIn, CartController.minusQty);
+
+router
+  .route("/getItemsCount")
+  .get(GlobalMiddleware.isLoggedIn, CartController.getItemsCount);
+
 module.exports = router;

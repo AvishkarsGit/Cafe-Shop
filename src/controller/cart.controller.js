@@ -1,3 +1,4 @@
+const { TimeSeriesBucketTimestamp } = require("redis");
 const Cart = require("../models/cart.model.js");
 const Product = require("../models/products.model.js");
 
@@ -20,11 +21,28 @@ class CartController {
       }
 
       // If product is not in cart, create new entry
-      const newItem = await new Cart({ userId, productId, quantity: 1 }).save();
+      await new Cart({
+        userId,
+        productId,
+        quantity: 1,
+        updatedPrice: product.ProductPrice,
+      }).save();
+
+      const count = await Cart.find({ userId }).countDocuments();
+
+      await Product.updateOne(
+        {
+          _id: productId,
+        },
+        {
+          $set: { updatedProductPrice: product.ProductPrice },
+        }
+      );
 
       return res.json({
         success: true,
         message: "Added to cart",
+        count,
       });
     } catch (error) {
       return res.json({ success: false, message: error.message });
@@ -81,9 +99,26 @@ class CartController {
         });
       }
 
+      const product = await Product.findOne({ _id: productId });
+
+      const qty = cartItem.quantity;
+      const price = product.ProductPrice;
+      const updatedPrice = qty * price;
+
+      await Cart.findOneAndUpdate(
+        { productId, userId },
+        { $set: { updatedPrice } }
+      );
+
+      await Product.findOneAndUpdate(
+        { _id: productId },
+        { $set: { updatedProductPrice: updatedPrice } }
+      );
+
       return res.json({
         success: true,
         quantity: cartItem.quantity,
+        updatedPrice,
       });
     } catch (error) {
       return res.json({
@@ -92,11 +127,13 @@ class CartController {
       });
     }
   };
+
   static minusQty = async (req, res) => {
     try {
       const { productId } = req.body;
       const userId = req.user.id; // Ensure req.user is set
 
+      let count;
       // Decrement quantity by 1 if greater than 1
       let cartItem = await Cart.findOneAndUpdate(
         { productId, userId, quantity: { $gt: 1 } }, // Ensures it doesn't go below 1
@@ -113,21 +150,62 @@ class CartController {
           await Cart.deleteOne({ productId, userId });
         }
 
+        count = await Cart.find({ userId }).countDocuments();
         return res.json({
           success: false,
           message: "Cannot decrease quantity below 1",
+          count,
         });
       }
+
+      const product = await Product.findOne({ _id: productId });
+
+      const qty = cartItem.quantity;
+      const price = product.ProductPrice;
+      const updatedPrice = qty * price;
+
+      await Cart.findOneAndUpdate(
+        { productId, userId },
+        { $set: { updatedPrice } }
+      );
+
+      await Product.findOneAndUpdate(
+        { _id: productId },
+        { $set: { updatedProductPrice: updatedPrice } }
+      );
 
       return res.json({
         success: true,
         quantity: cartItem.quantity,
+        count,
+        updatedPrice,
       });
     } catch (error) {
       return res.status(500).json({
         success: false,
         message: error.message,
       });
+    }
+  };
+
+  static getItemsCount = async (req, res) => {
+    try {
+      const userId = req.user._id;
+
+      const count = await Cart.find({ userId }).countDocuments();
+
+      if (count === 0) {
+        return res.json({
+          success: false,
+        });
+      } else {
+        return res.json({
+          success: true,
+          count,
+        });
+      }
+    } catch (error) {
+      return res.json({ success: false, message: error.message });
     }
   };
 }

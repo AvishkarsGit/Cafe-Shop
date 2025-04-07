@@ -1,4 +1,4 @@
-<nav>
+<nav class="sticky top-0 z-50">
   <div
     class="bg-white !px-[10px] h-[50px] flex items-center justify-between shadow-[0px_0px_4px_rgba(0,0,0,0.2)]"
   >
@@ -50,9 +50,14 @@
             <a href="" class="text-[20px]"><i class="ri-menu-line"></i> </a>
           </li>
           <li>
-            <a href="" class="text-[20px]"
-              ><i class="ri-shopping-cart-line"></i
-            ></a>
+            <a href="/getCart" class="text-[20px]">
+              <i class="ri-shopping-cart-line"></i>
+              <span
+                id="cart-items-qty"
+                class="text-[10px] absolute top-[8px] bg-[var(--color-primary)] right-[40px] w-[15px] h-[15px] hidden items-center justify-center rounded-[50%] text-white font-bold"
+                >0</span
+              >
+            </a>
           </li>
           <li>
             <a href="" class="text-[20px]"><i class="ri-user-line"></i></a>
@@ -72,12 +77,41 @@
   </div>
 </nav>
 
+<!-- sweet alert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- socket.io -->
+<script src="/socket.io/socket.io.js"></script>
+
 <script>
+  window.addEventListener("pageshow", function (event) {
+    if (
+      event.persisted ||
+      (window.performance && performance.navigation.type === 2)
+    ) {
+      // Reload the page if it was restored from BFCache
+      window.location.reload();
+    }
+  });
+
+  socket = io();
+
   const menuBarBtn = document.getElementById("menu-bar");
   const divContents = document.getElementById("nav-contents");
   const loginBtn = document.getElementById("login-btn");
+  const countSpan = document.getElementById("cart-items-qty");
 
   let toggle = false;
+
+  socket.on("cart-item-count", (count) => {
+    if (count > 0) {
+      countSpan.innerText = count;
+      countSpan.style.display = "flex";
+    } else {
+      countSpan.style.display = "none";
+    }
+  });
+
+  fetchItemsCount(countSpan);
 
   if (menuBarBtn) {
     menuBarBtn.addEventListener("click", (e) => {
@@ -111,5 +145,19 @@
       e.preventDefault();
       window.location.replace("/auth/login");
     });
+  }
+
+  async function fetchItemsCount(countSpan) {
+    try {
+      const response = await axios.get("/cart/getItemsCount");
+      if (response.data.success) {
+        countSpan.innerText = response.data.count;
+        countSpan.style.display = "flex";
+      } else {
+        countSpan.style.display = "none";
+      }
+    } catch (error) {
+      showErrorAlert(error.response.data.message);
+    }
   }
 </script>

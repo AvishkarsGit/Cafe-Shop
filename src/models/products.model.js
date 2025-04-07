@@ -9,6 +9,10 @@ const productModel = mongoose.Schema({
     type: String,
     required: true,
   },
+  updatedProductPrice: {
+    type: Number,
+    required: true,
+  },
   Description: {
     type: String,
   },

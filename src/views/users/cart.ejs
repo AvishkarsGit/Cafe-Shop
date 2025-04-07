@@ -1,4 +1,71 @@
-<% layout("layouts/boilerplate.ejs") %>
+<% layout("layouts/partials.ejs") %>
 <body>
-  <h2>Cart</h2>
+  <% if (cartItems && cartItems.length) { %>
+  <section class="grid gap-4 !px-4 sm:!px-6">
+    <!-- items -->
+    <div class="w-full max-w-[1000px] bg-white rounded-[3px] !mx-auto !mt-7">
+      <% for(let item of cartItems) { %>
+      <div class="flex flex-wrap sm:flex-nowrap items-center gap-5 !p-1.5">
+        <div
+          class="h-[100px] w-[100px] sm:h-[150px] sm:w-[150px] mx-auto sm:mx-0"
+        >
+          <img
+            src="<%= item.imgUrl %>"
+            class="h-full w-full object-cover rounded-[10px]"
+            alt="product-image"
+          />
+        </div>
+        <div class="flex-1 min-w-0">
+          <h1 class="text-lg sm:text-xl font-bold !my-1 break-words">
+            <%= item.ProductName %>
+          </h1>
+          <p class="text-sm sm:text-[15px] font-medium !my-1 break-words">
+            <%= item.Description %>
+          </p>
+          <span
+            id="price-span_<%= item._id%>"
+            class="text-[var(--color-success)] text-[18px] font-semibold price_span block !mb-2"
+            >₹ <%= item.updatedProductPrice %>.00</span
+          >
+          <div class="flex items-center gap-4 qty-div !my-1">
+            <button
+              id="<%= item._id %>"
+              class="bg-[var(--color-primary)] w-[30px] h-[30px] rounded-full text-white font-semibold text-[18px] flex items-center justify-center hover:cursor-pointer qty-minus"
+            >
+              -
+            </button>
+            <span id="qty_<%= item._id  %>" class="font-semibold text-[18px]"
+              ><%= item.quantity %></span
+            >
+            <button
+              id="<%= item._id  %>"
+              class="bg-[var(--color-primary)] w-[30px] h-[30px] rounded-full text-white font-semibold text-[18px] flex items-center justify-center hover:cursor-pointer qty-add"
+            >
+              +
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="h-[1px] bg-gray-300 !mt-2 !mx-1"></div>
+      <% } %>
+    </div>
+
+    <!-- checkout  -->
+    <div
+      class="w-full max-w-[1000px] flex flex-wrap sm:flex-nowrap items-center justify-between !mb-7 !mx-auto bg-white !py-5 !px-4 sm:!px-7 rounded-[5px] gap-4"
+    >
+      <span id="total-price" class="font-semibold text-xl sm:text-2xl"
+        >₹ 1350.00</span
+      >
+      <button
+        id="checkout"
+        class="bg-[var(--color-primary)] text-white !px-6 !py-2 sm:!px-8 sm:!py-2 font-bold uppercase text-lg sm:text-xl rounded-[3px] hover:bg-[var(--color-success)] hover:cursor-pointer"
+      >
+        Checkout
+      </button>
+    </div>
+  </section>
+  <% } %>
+
+  <script src="/js/cart_page.js"></script>
 </body>

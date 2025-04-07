@@ -165,8 +165,11 @@
           </p>
         </div>
         <div class="flex items-center justify-between !px-4 !py-3">
-          <span class="text-[var(--color-success)] font-semibold text-[19px]">
-            ₹ <%= product.ProductPrice %>.00
+          <span
+            class="text-[var(--color-success)] font-semibold text-[19px]"
+            id="ProductPrice"
+          >
+            ₹ <%= product.updatedProductPrice %>.00
           </span>
           <div>
             <button

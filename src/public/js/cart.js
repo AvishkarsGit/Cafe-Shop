@@ -6,8 +6,9 @@ btnAdd.forEach((button) => {
   button.addEventListener("click", async function (e) {
     e.preventDefault();
 
+    button.disabled = true;
+    button.classList.add("bg-gray-400");
     const productId = e.target.id;
-    console.log(productId);
 
     await addToCart(productId, button);
   });
@@ -26,8 +27,9 @@ async function addToCart(productId, button) {
 
     if (response.data.success) {
       showSuccessAlert(response.data.message);
+      socket.emit("cart-count", response.data.count);
       setTimeout(() => {
-        showQtyDiv(button, 1);
+        showQtyDiv(button);
       }, 5000);
     }
   } catch (error) {
@@ -85,6 +87,11 @@ async function addQty(qtySpan, productId) {
 
     if (response.data.success) {
       qtySpan.innerText = response.data.quantity;
+
+      const updatedPrice = response.data.updatedPrice;
+      const card = qtySpan.closest(".flex.items-center.justify-between");
+      const priceSpan = card.querySelector("#ProductPrice");
+      priceSpan.innerText = `₹ ${updatedPrice}.00`;
     }
   } catch (error) {
     showErrorAlert(error.response.data.message);
@@ -105,8 +112,16 @@ async function minusQty(qtySpan, qtyDiv, button, productId) {
     if (response.data.success) {
       if (response.data.quantity >= 1)
         qtySpan.innerText = response.data.quantity;
+      const updatedPrice = response.data.updatedPrice;
+      const card = qtySpan.closest(".flex.items-center.justify-between");
+      const priceSpan = card.querySelector("#ProductPrice");
+      priceSpan.innerText = `₹ ${updatedPrice}.00`;
     } else {
+      socket.emit("cart-count", response.data.count);
       qtyDiv.style.display = "none";
+
+      button.disabled = false;
+      button.classList.add("bg-[var(--color-primary)]");
       button.style.display = "block";
     }
   } catch (error) {

@@ -2,12 +2,39 @@ const User = require("../models/user.model");
 const cloudinary = require("../config/cloudinary.js");
 const { Category } = require("../models/category.model");
 const Product = require("../models/products.model.js");
+const Cart = require("../models/cart.model.js");
 class HomeController {
   static getOrders = (req, res) => {
     res.render("users/orders.ejs");
   };
-  static getCart = (req, res) => {
-    res.render("users/cart.ejs");
+  static getCart = async (req, res) => {
+    try {
+      const userId = req.user._id;
+
+      const items = await Cart.find({ userId }).populate("productId");
+      let cartItems = [];
+
+      if (!items) {
+        return res.json({ success: false, message: "No items in the cart" });
+      }
+
+      for (let item of items) {
+        // Clone product object and append quantity
+        let productWithQuantity = {
+          ...item.productId._doc,
+          quantity: item.quantity,
+        };
+        cartItems.push(productWithQuantity);
+      }
+
+
+      res.render("users/cart.ejs", { cartItems });
+    } catch (error) {
+      return res.json({
+        success: false,
+        message: error.message,
+      });
+    }
   };
   static getProfile = async (req, res) => {
     const id = req.user._id;
