@@ -67,5 +67,24 @@
   </section>
   <% } %>
 
-   <script src="/js/cart_page.js"></script>
+  <!-- check if cart is empty -->
+  <% if (cartItems.length < 1) { %>
+  <div class="flex items-center justify-center h-screen !px-4">
+    <div class="text-center max-w-md">
+      <img
+        src="/assets/cart.png"
+        alt="Empty cart"
+        class="!mx-auto w-35 sm:w-40 md:w-55 lg:w-80"
+      />
+      <h1
+        class="!mt-6 text-3xl font-bold sm:text-4xl md:text-5xl text-[var(--color-primary)]"
+      >
+        Your cart is empty!!
+      </h1>
+    </div>
+  </div>
+
+  <% } %>
+
+  <script src="/js/cart_page.js"></script>
 </body>
