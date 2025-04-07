@@ -27,10 +27,12 @@ qtyMinus.forEach((minus) => {
   });
 });
 
-checkoutBtn.addEventListener("click", (e) => {
-  e.preventDefault();
-  calculateTotalPrice();
-});
+if (checkoutBtn) {
+  checkoutBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    calculateTotalPrice();
+  });
+}
 
 async function addQty(qtySpan, priceSpan, productId) {
   try {
@@ -89,5 +91,8 @@ function calculateTotalPrice() {
     const numericPrice = parseFloat(totalPrice.split("₹ ")[1]);
     totalAmount = totalAmount + numericPrice;
   });
-  totalPriceSpan.innerHTML = `₹ ${totalAmount}.00`;
+
+  if (totalPriceSpan) {
+    totalPriceSpan.innerHTML = `₹ ${totalAmount}.00`;
+  }
 }
