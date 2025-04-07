@@ -124,5 +124,21 @@ class CategoryController {
       });
     }
   };
+
+  static filteredCategoryPage = async (req, res) => {
+    const categoryId = req.params.id;
+    try {
+      const categories = await Category.find({ _id: categoryId });
+
+      console.log(categories);
+
+      res.render("category/filtered_category.ejs");
+    } catch (error) {
+      return res.json({
+        success: false,
+        message: error.message,
+      });
+    }
+  };
 }
 module.exports = CategoryController;

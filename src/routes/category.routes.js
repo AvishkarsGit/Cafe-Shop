@@ -18,6 +18,7 @@ router
   .post(upload.single("categoryImgUrl"), CategoryController.addCategory);
 
 router.route("/categories").get(CategoryController.allCategories);
+//router.route("/categories/:id").get(CategoryController.filteredCategoryPage);
 
 router
   .route("/edit/:id")
