@@ -44,5 +44,17 @@ router
   .route("/send/reset/password/token")
   .post(UserController.sendResetPasswordToken);
 
+router
+  .route('/contact')
+  .get(UserController.contactPage)
+  .post(UserController.addData);
+  ;
+
+router
+   .route("/queries")
+   .get(UserController.queries);  
+
+router.post("/queries/delete/:id", UserController.deleteQuery);
 
 module.exports = router;
+ 

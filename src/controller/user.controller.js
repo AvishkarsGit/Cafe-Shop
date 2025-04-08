@@ -2,6 +2,7 @@ const User = require("../models/user.model.js");
 const JWT = require("../utils/jwt.js");
 const NodeMailer = require("../utils/NodeMailer.js");
 const Product = require("../models/products.model.js");
+const Query = require("../models/query.model.js")
 require("dotenv").config();
 
 const Redis = require("../utils/Redis.js");
@@ -366,6 +367,70 @@ class UserController {
       });
     }
   };
+
+
+
+  //Update only this code
+  static contactPage = async (req, res) => {
+   try{
+    return res.render("auth/contact.ejs", { basePath: "" });
+   }
+   catch(error){
+    return res.status(400).json({
+      success:false,
+      message:error.message
+    })
+   }
+  };
+
+  static addData = async (req,res)=>{
+    try{
+    const{name,email,phone,description}=req.body;
+    const QueryData = await Query.create({
+      name,
+      email,
+      phone,
+      description
+    })
+    return res.redirect('/auth/contact')
+
+    }
+    catch(error){
+    return res.status(400).json({
+      success:false,
+      message:error.message
+    })
+
+    }
+  }
+
+  // i want only here changes
+
+  static queries = async (req, res) => {
+    try {
+      const AllQuery = await Query.find(); // fetch all queries
+      return res.render("auth/queries.ejs", { AllQuery });
+    } catch (error) {
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  };
+  
+  static deleteQuery = async (req, res) => {
+    try {
+      const id = req.params.id;
+      await Query.findByIdAndDelete(id);
+      return res.redirect("/auth/queries");
+    } catch (error) {
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  };
+  
 }
 
 module.exports = UserController;

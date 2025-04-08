@@ -1,0 +1,10 @@
+<% layout("layouts/partials.ejs") %>
+
+<form action="<%= '/auth/contact' %>" method="post">
+    <h1 style="color: red;">Any Query Please Mention Here!</h1>
+    <input type="text" name="name" placeholder="Name">
+    <input type="text" name="email"placeholder="Email">
+    <input type="text" name="phone" placeholder="Phone">
+    <input type="text" name="description" placeholder="Description">
+    <input type="submit" value="Submit">
+</form>
