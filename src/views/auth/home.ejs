@@ -73,24 +73,29 @@
         <!--  -->
         <% for(let category of categories) { %>
         <div class="swiper-slide flex flex-col items-center">
-          <div
-            class="w-[100px] sm:w-[110px] md:w-[120px] !p-2 hover:cursor-pointer rounded-[10px] transition-all duration-300 ease-in-out transform hover:scale-105"
+          <a
+            href="/<%= category._id %>"
+            class="decoration-0"
           >
             <div
-              class="h-[120px] flex flex-col items-center justify-center !p-2 shadow-[0px_0px_5px_rgba(0,0,0,0.3)] rounded-[10px]"
+              class="cards w-[100px] sm:w-[110px] md:w-[120px] !p-2 hover:cursor-pointer rounded-[10px] transition-all duration-300 ease-in-out transform hover:scale-105"
             >
-              <img
-                src="<%= category.categoryImgUrl %>"
-                class="h-[60px] w-[60px] sm:h-[70px] sm:w-[70px] rounded-full object-cover"
-                alt="category"
-              />
-              <span
-                class="font-semibold text-[12px] sm:text-[14px] text-center mt-2"
+              <div
+                class="h-[120px] flex flex-col items-center justify-center !p-2 shadow-[0px_0px_5px_rgba(0,0,0,0.3)] rounded-[10px]"
               >
-                <%= category.category %>
-              </span>
+                <img
+                  src="<%= category.categoryImgUrl %>"
+                  class="h-[60px] w-[60px] sm:h-[70px] sm:w-[70px] rounded-full object-cover"
+                  alt="category"
+                />
+                <span
+                  class="font-semibold text-[12px] sm:text-[14px] text-center mt-2"
+                >
+                  <%= category.category %>
+                </span>
+              </div>
             </div>
-          </div>
+          </a>
         </div>
         <% } %>
         <!-- -->
@@ -207,6 +212,23 @@
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script src="/js/cart.js"></script>
 
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const swiperWrapper = document.querySelector(".swiper-wrapper");
+
+      if (!swiperWrapper) return;
+
+      swiperWrapper.addEventListener("click", (e) => {
+        const card = e.target.closest(".cards");
+
+        if (card) {
+          console.log("Card clicked:", card.id);
+          window.location.href = `/category/${card.id}`;
+        }
+      });
+    });
+  </script>
+
   <!-- Initialize Swiper -->
   <script>
     var swiper = new Swiper(".mySwiper", {
@@ -221,6 +243,8 @@
         768: { slidesPerView: 5, spaceBetween: 15 }, // Tablets
         1024: { slidesPerView: 7, spaceBetween: 20 }, // Larger screens
       },
+      preventClicks: false,
+      preventClicksPropagation: false,
     });
   </script>
 </body>

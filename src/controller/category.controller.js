@@ -1,5 +1,6 @@
 const { Category } = require("../models/category.model.js");
 const cloudinary = require("../config/cloudinary");
+const productsModel = require("../models/products.model.js");
 class CategoryController {
   static getCategoryPage = (req, res) => {
     res.render("category/add_category.ejs");
@@ -117,6 +118,27 @@ class CategoryController {
         success: true,
         message: "Product is updated",
       });
+    } catch (error) {
+      return res.json({
+        success: false,
+        message: error.message,
+      });
+    }
+  };
+
+  static filteredCategoryPage = async (req, res) => {
+    const categoryId = req.params.id;
+    try {
+      const categories = await Category.findOne({
+        _id: categoryId,
+      });
+
+      const products = await productsModel.find({
+        category: categories.category,
+      });
+
+
+      res.render("category/filtered_category.ejs", { products, categories });
     } catch (error) {
       return res.json({
         success: false,

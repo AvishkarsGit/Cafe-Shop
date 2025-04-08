@@ -4,6 +4,7 @@ const GlobalMiddleware = require("../middleware/global.middleware.js");
 const HomeController = require("../controller/home.controller.js");
 const upload = require("../config/multer.js");
 const CartController = require("../controller/cart.controller.js");
+const CategoryController = require("../controller/category.controller.js");
 const router = express.Router();
 
 router.route("/home").get(HomeController.getHomePage);
@@ -21,6 +22,7 @@ router.route("/orders").get(HomeController.getOrders);
 
 router.route("/getCart").get(HomeController.getCart);
 router.route("/profile").get(HomeController.getProfile);
+router.route("/:id").get(CategoryController.filteredCategoryPage);
 
 router
   .route("/profile/edit/:id")
