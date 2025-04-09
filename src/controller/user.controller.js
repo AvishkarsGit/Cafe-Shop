@@ -416,6 +416,8 @@ class UserController {
   static queries = async (req, res) => {
     try {
       const AllQuery = await Query.find(); // fetch all queries
+      
+
       return res.render("auth/queries.ejs", { AllQuery });
     } catch (error) {
       return res.status(400).json({
