@@ -1,0 +1,104 @@
+<% layout("layouts/partials.ejs") %>
+<body>
+  <form
+    action="/contact"
+    method="post"
+    id="contact-form"
+    class="!shadow-md bg-white !rounded-2xl !my-10 lg:!w-[420px] md:!w-[400px] sm:!w-[330px] !w-[300px]"
+  >
+    <h1
+      class="font-extrabold sm:text-xl text-[17px] text-center uppercase text-[var(--color-primary)]"
+    >
+      Inquiry Form
+    </h1>
+    <input
+      type="text"
+      class="sm:!p-[10px] !p-[7px] sm:text-[16px] text-[13px]"
+      name="name"
+      required
+      placeholder="Enter your name"
+    />
+    <input
+      type="text"
+      class="sm:!p-[10px] !p-[7px] sm:text-[16px] text-[13px]"
+      name="email"
+      required
+      placeholder="Enter your email"
+    />
+    <input
+      type="text"
+      name="phone"
+      required
+      class="sm:!p-[10px] !p-[7px] sm:text-[16px] text-[13px]"
+      placeholder="Enter your phone number"
+    />
+    <textarea
+      class="outline-none border border-gray-400 w-[100%] rounded-[10px] !mt-2 !p-2"
+      rows="5"
+      class="sm:!p-[10px] !p-[7px] sm:text-[16px] text-[13px]"
+      placeholder="What's your problem? "
+      name="description"
+    ></textarea>
+    <div class="flex items-center justify-center">
+      <button
+        id="submit-btn"
+        class="bg-[var(--color-primary)] text-white text-[15px] font-semibold !px-7 !py-2 !my-2 rounded-[5px] hover:cursor-pointer hover:bg-black"
+      >
+        Submit
+      </button>
+    </div>
+  </form>
+
+  <script>
+    const contactForm = document.getElementById("contact-form");
+    const submitBtn = document.getElementById("submit-btn");
+    submitBtn.addEventListener("click", async function (event) {
+      event.preventDefault(); // Prevent default form submission
+
+      // Ensure form is correctly referenced
+      const formData = new FormData(contactForm); // Correct way to create FormData
+
+      const userData = {
+        name: formData.get("name"),
+        email: formData.get("email"),
+        phone: formData.get("phone"),
+        description: formData.get("description"),
+      };
+
+      //alert("Please wait..."); //ui part
+
+      if (userData.name.trim() === "") {
+        showErrorAlert("Name must be required");
+        return;
+      }
+      if (userData.email.trim() === "") {
+        showErrorAlert("Email must be required");
+        return;
+      }
+      if (userData.phone.trim() === "") {
+        showErrorAlert("Phone number must be required");
+        return;
+      }
+      if (userData.description.trim() === "") {
+        showErrorAlert("Description must be at least short.");
+        return;
+      }
+
+      try {
+        const response = await axios.post("/contact", userData, {
+          withCredentials: true,
+          headers: { "Content-Type": "application/json" },
+        });
+
+        if (response.data.success) {
+          showSuccessAlert(response.data.message, response.data.sub_message);
+          setTimeout(() => {
+            location.replace("/contact");
+          }, 5000);
+        }
+      } catch (error) {
+        showErrorAlert(error.response.data.message);
+      }
+    });
+  </script>
+</body>

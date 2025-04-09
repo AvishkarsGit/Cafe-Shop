@@ -2,6 +2,7 @@ const User = require("../models/user.model.js");
 const JWT = require("../utils/jwt.js");
 const NodeMailer = require("../utils/NodeMailer.js");
 const Product = require("../models/products.model.js");
+const Query = require("../models/query.model.js");
 require("dotenv").config();
 
 const Redis = require("../utils/Redis.js");
@@ -362,6 +363,76 @@ class UserController {
       return res.status(200).json({
         success: true,
         message: "Password is updated successfully",
+      });
+    } catch (error) {
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  };
+
+  //Update only this code
+  static contactPage = async (req, res) => {
+    try {
+      return res.render("auth/contact.ejs");
+    } catch (error) {
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  };
+
+  static addData = async (req, res) => {
+    try {
+      const { name, email, phone, description } = req.body;
+      const QueryData = await Query.create({
+        name,
+        email,
+        phone,
+        description,
+      });
+
+      if (!QueryData) {
+        throw new Error("failed to saved");
+      }
+
+      return res.json({
+        success: true,
+        message: "Your query has been saved",
+        sub_message: "Our admin will contact you soon.",
+      });
+    } catch (error) {
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  };
+
+  // i want only here changes
+
+  static queries = async (req, res) => {
+    try {
+      const AllQuery = await Query.find(); // fetch all queries
+      return res.render("auth/queries.ejs", { AllQuery });
+    } catch (error) {
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  };
+
+  static deleteQuery = async (req, res) => {
+    try {
+      const id = req.params.id;
+
+      await Query.findOneAndDelete({ _id: id });
+      return res.json({
+        success: true,
+        message: "We are deleting requested query",
       });
     } catch (error) {
       return res.status(400).json({

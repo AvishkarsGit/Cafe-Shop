@@ -8,6 +8,7 @@ const profileBtn = document.getElementById("profile");
 const productBtn = document.getElementById("add-product");
 const categoryBtn = document.getElementById("add-category");
 const dashboardDiv = document.querySelector(".dashboard");
+const queriesBtn = document.getElementById("queries");
 
 checkRoutes = () => {
   const currentPath = window.location.pathname;
@@ -53,6 +54,10 @@ checkRoutes = () => {
       categoryBtn.style.backgroundColor = "rgba(228, 25, 89, 0.847)";
       categoryBtn.style.color = "white";
       break;
+    case "/queries":
+      queriesBtn.style.backgroundColor = "rgba(228, 25, 89, 0.847)";
+      queriesBtn.style.color = "white";
+      break;
     case "/category/create":
       categoryBtn.style.backgroundColor = "rgba(228, 25, 89, 0.847)";
       categoryBtn.style.color = "white";
@@ -70,6 +75,13 @@ if (loginBtn) {
   loginBtn.addEventListener("click", (e) => {
     e.preventDefault();
     location.replace("/auth/login");
+  });
+}
+
+if (queriesBtn) {
+  queriesBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    location.replace("/queries");
   });
 }
 

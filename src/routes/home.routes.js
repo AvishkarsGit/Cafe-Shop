@@ -22,7 +22,17 @@ router.route("/orders").get(HomeController.getOrders);
 
 router.route("/getCart").get(HomeController.getCart);
 router.route("/profile").get(HomeController.getProfile);
+<<<<<<< HEAD
 router.route("/:id").get(CategoryController.filteredCategoryPage);
+=======
+router.route("/queries").get(UserController.queries);
+router.route("/queries/delete/:id").delete(UserController.deleteQuery);
+
+router
+  .route("/contact")
+  .get(UserController.contactPage)
+  .post(UserController.addData);
+>>>>>>> contact
 
 router
   .route("/profile/edit/:id")
