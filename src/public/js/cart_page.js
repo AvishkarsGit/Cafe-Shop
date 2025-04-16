@@ -1,6 +1,7 @@
 const qtyMinus = document.querySelectorAll(".qty-minus");
 const qtyAdd = document.querySelectorAll(".qty-add");
 const checkoutBtn = document.querySelector("#checkout");
+const goNext = document.getElementById("go-next");
 
 calculateTotalPrice();
 qtyAdd.forEach((add) => {
@@ -32,6 +33,13 @@ if (checkoutBtn) {
     e.preventDefault();
     calculateTotalPrice();
   });
+}
+
+if (goNext) {
+  goNext.addEventListener("click",(e)=>{
+    e.preventDefault();
+    window.location.assign("/place-order")
+  })
 }
 
 async function addQty(qtySpan, priceSpan, productId) {

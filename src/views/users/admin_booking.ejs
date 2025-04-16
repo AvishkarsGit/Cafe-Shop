@@ -1,0 +1,135 @@
+<% layout('layouts/boilerplate.ejs') %>
+<body>
+  <!-- tabs -->
+  <div class="my-3">
+    <ul class="flex items-center justify-around text-lg font-semibold">
+      <button>
+        <li
+          id="pending-booking"
+          class="cursor-pointer px-4 py-2 border-b-2 border-transparent hover:border-red-500"
+        >
+          Pending Bookings
+        </li>
+      </button>
+      <button>
+        <li
+          id="requests"
+          class="cursor-pointer px-4 py-2 border-b-2 border-transparent hover:border-blue-500"
+        >
+          Requests
+        </li>
+      </button>
+      <button>
+        <li
+          id="add-table"
+          class="cursor-pointer px-4 py-2 border-b-2 border-transparent hover:border-yellow-500"
+        >
+          Add tables
+        </li>
+      </button>
+    </ul>
+  </div>
+
+  <!-- tab contents -->
+  <div id="pending-div" class="border border-red-500 bg-red-500 p-4">
+    Pending Bookings Content
+  </div>
+
+  <div id="requests-div" class="hidden border border-blue-500 bg-blue-500 p-4">
+    Requests Content
+  </div>
+
+  <div id="table-div" class="hidden p-4">
+    <form action="/add-table" method="post" id="table-form">
+      <label for="">
+        <span class="font-semibold text-[16px]"
+          >Assign serial number to your table</span
+        >
+        <input
+          type="number"
+          placeholder="e.g 1/2/3"
+          name="tableNumber"
+          required
+        />
+      </label>
+      <div class="flex items-center justify-center !my-2">
+        <button
+          id="btn-create-table"
+          class="bg-[var(--color-primary)] text-white text-[15px] !p-[2px_10px] font-semibold hover:cursor-pointer hover:bg-black"
+        >
+          Create table
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const createBtn = document.getElementById("btn-create-table");
+    const tableForm = document.getElementById("table-form");
+    const tabs = {
+      "pending-booking": "pending-div",
+      requests: "requests-div",
+      "add-table": "table-div",
+    };
+
+    function setActiveTab(activeId) {
+      for (const tabId in tabs) {
+        const tabElement = document.getElementById(tabId);
+        const contentElement = document.getElementById(tabs[tabId]);
+
+        if (tabId === activeId) {
+          tabElement.classList.add("border-b-2", "border-black");
+          contentElement.classList.remove("hidden");
+        } else {
+          tabElement.classList.remove("border-b-2", "border-black");
+          contentElement.classList.add("hidden");
+        }
+      }
+    }
+
+    // Add click event listeners
+    Object.keys(tabs).forEach((tabId) => {
+      document.getElementById(tabId).addEventListener("click", () => {
+        setActiveTab(tabId);
+      });
+    });
+
+    // Set default tab
+    setActiveTab("pending-booking");
+
+    if (createBtn) {
+      createBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        const formData = new FormData(tableForm);
+
+        const tableNumber = tableForm.elements["tableNumber"].value;
+
+        if (tableNumber > 12) {
+          showErrorAlert("You can't add more than 12");
+          return;
+        }
+        try {
+          const response = await axios.post(
+            "/add-table",
+            { tableNumber },
+            {
+              headers: { "Content-Type": "application/json" },
+            }
+          );
+          console.log(response);
+
+          if (response.data.success) {
+            showSuccessAlert(response.data.message);
+            setTimeout(() => {
+              window.location.reload();
+            }, 5000);
+          } else {
+            showErrorAlert(response.data.message);
+          }
+        } catch (error) {
+          showErrorAlert(error.response.data.message);
+        }
+      });
+    }
+  </script>
+</body>

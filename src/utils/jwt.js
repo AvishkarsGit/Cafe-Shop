@@ -14,6 +14,13 @@ class JWT {
     }
     return otp;
   };
+  static generateBookingCode = () => {
+    let otp = "";
+    for (let i = 0; i < 8; i++) {
+      otp += Math.floor(Math.random() * 10);
+    }
+    return otp;
+  };
 
   static generateAccessToken = (payload, expires) => {
     return jwt.sign(payload, process.env.JWT_ACCESS_SECRETE, {

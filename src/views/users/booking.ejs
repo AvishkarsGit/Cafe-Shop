@@ -1,0 +1,304 @@
+<% layout('layouts/partials.ejs') %>
+<body>
+  <div>
+    <form
+      action=""
+      class="max-w-md mx-auto p-6 bg-white shadow-md rounded-xl space-y-4"
+    >
+      <h1 class="text-red-500 capitalize font-bold text-xl text-center !my-2">
+        Ordering Details
+      </h1>
+      <hr class="!my-2" />
+      <div>
+        <div class="!mb-2">
+          <span class="text-lg font-semibold text-gray-700"
+            >Have you booked table?</span
+          >
+        </div>
+        <div class="flex flex-col items-start justify-start">
+          <label class="flex items-center space-x-2">
+            <input
+              type="radio"
+              name="ordering"
+              value="yes"
+              class="form-radio text-blue-600"
+            />
+            <span class="text-gray-600 !mx-3">Yes</span>
+          </label>
+          <label class="flex items-center space-x-2">
+            <input
+              type="radio"
+              name="ordering"
+              value="no"
+              class="form-radio text-blue-600"
+            />
+            <span class="text-gray-600 !mx-3">No</span>
+          </label>
+        </div>
+
+        <div id="table-code" class="!my-2 hidden">
+          <span class="text-md font-semibold text-gray-700"
+            >Enter your 6 digit table code that you have seated</span
+          >
+          <input
+            id="table_code"
+            type="text"
+            placeholder="e.g. (123456)"
+            required
+            name="tableCode"
+          />
+        </div>
+        <div id="booking-code" class="!my-2 hidden">
+          <span class="text-md font-semibold text-gray-700"
+            >Enter booking code that you've received on email</span
+          >
+          <input
+            id="booking_code"
+            type="text"
+            placeholder="e.g. (12342356)"
+            required
+            name="bookingCode"
+          />
+        </div>
+      </div>
+
+      <!-- next btn -->
+      <div class="flex items-center justify-center">
+        <button
+          id="next-btn"
+          class="bg-[var(--color-primary)] !p-[3px_12px] text-white font-semibold hover:cursor-pointer hover:bg-black hidden"
+        >
+          Next
+        </button>
+      </div>
+
+      <!-- place order button -->
+      <div class="flex items-center justify-center">
+        <button
+          id="place-order-btn"
+          class="bg-green-600 !p-[3px_12px] text-white font-semibold hover:cursor-pointer hover:bg-green-800 hidden"
+        >
+          Place order
+        </button>
+      </div>
+
+      <!-- show booked tables text -->
+      <div
+        id="booked-tables-div"
+        class="hidden items-center justify-center !my-2"
+      >
+        <h1 class="font-semibold text-xl">Your Booked Table Numbers are :</h1>
+      </div>
+
+      <!-- tables div -->
+      <div id="tables-div" class="hidden">
+        <h1 class="text-gray-800 font-semibold text-[18px] text-center !my-2">
+          Your table is :
+        </h1>
+        <div id="table-center-div" class="flex items-center justify-center">
+          <div id="grid-div" class="grid grid-cols-4 gap-2">
+            <div
+              class="border-[2px] border-gray-600 rounded-xl !my-2 w-[80px] !py-2 flex items-center justify-center"
+            >
+              <span class="text-center font-bold">1</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const btnNext = document.getElementById("next-btn");
+    const orderingRadios = document.querySelectorAll('input[name="ordering"]');
+    const tableCodeDiv = document.getElementById("table-code");
+    const bookingCodeDiv = document.getElementById("booking-code");
+    const tableCodeInput = document.getElementById("table_code");
+    const bookingCodeInput = document.getElementById("booking_code");
+    const tablesDiv = document.getElementById("tables-div");
+    const tablesCenterDiv = document.getElementById("table-center-div");
+    const gridDiv = document.getElementById("grid-div");
+    const btnPlaceOrder = document.getElementById("place-order-btn");
+    const bookedTablesDiv = document.getElementById("booked-tables-div");
+    const bookedTablesText = document.createElement("span");
+
+    orderingRadios.forEach((radio) => {
+      radio.addEventListener("change", () => {
+        btnNext.classList.remove("hidden");
+        btnPlaceOrder.classList.add("hidden");
+        tablesDiv.classList.add("hidden");
+
+        // Clear inputs whenever the radio is changed
+        tableCodeInput.value = "";
+        bookingCodeInput.value = "";
+
+        if (radio.value === "yes" && radio.checked) {
+          tableCodeDiv.classList.add("hidden");
+          bookingCodeDiv.classList.remove("hidden");
+        } else if (radio.value === "no" && radio.checked) {
+          bookingCodeDiv.classList.add("hidden");
+          tableCodeDiv.classList.remove("hidden");
+        }
+      });
+    });
+
+    if (btnNext) {
+      btnNext.addEventListener("click", async (e) => {
+        e.preventDefault();
+
+        // If booking code section is visible
+        if (!bookingCodeDiv.classList.contains("hidden")) {
+          const bookingCodeValue = bookingCodeInput.value.trim();
+          if (bookingCodeValue !== "") {
+            //get the booked table by the authorized user
+
+            const response = await axios.post(
+              "/get-booked-table",
+              { bookingCode: bookingCodeValue },
+              {
+                headers: { "Content-Type": "application/json" },
+              }
+            );
+
+            if (response.data.success) {
+              btnNext.classList.add("hidden");
+              btnPlaceOrder.classList.remove("hidden");
+              bookedTablesDiv.classList.remove("hidden");
+              bookedTablesDiv.classList.add("flex");
+
+              const tables = response.data.tables;
+              let tableNum = [];
+              for (let table of tables) {
+                tableNum.push(table.tableNumber);
+              }
+
+              if (tableNum.length > 0) {
+                bookedTablesText.innerHTML = `
+                <span
+                  id="booked-tables-tv"
+                  class="font-medium text-xl !my-2 !p-[3px_20px] !mx-2 rounded-[5px] border border-green-500 text-green-800"
+                > ${tableNum}
+                </span>
+              `;
+                bookedTablesDiv.appendChild(bookedTablesText);
+              }
+            }
+          } else {
+            alert("Please enter a booking code.");
+          }
+        }
+
+        // If table code section is visible
+        if (!tableCodeDiv.classList.contains("hidden")) {
+          const tableCodeValue = tableCodeInput.value.trim();
+          if (tableCodeValue !== "") {
+            try {
+              const response = await axios.post(
+                "/get-table",
+                { tableCode: tableCodeValue },
+                {
+                  headers: { "Content-Type": "application/json" },
+                }
+              );
+
+              if (response.data.success) {
+                const tables = response.data.tables;
+                const selectedTable = response.data.selectedTable;
+                // Clear previous tables
+
+                gridDiv.innerHTML = "";
+
+                // Show the tables div
+                tablesDiv.classList.remove("hidden");
+
+                btnNext.classList.add("hidden");
+                btnPlaceOrder.classList.remove("hidden");
+
+                tables.forEach((tableNumber) => {
+                  console.log(tableNumber.tableNumber);
+
+                  const tableDiv = document.createElement("div");
+                  tableDiv.className =
+                    "border-[2px] rounded-xl !my-2 w-[80px] !py-2 flex items-center justify-center";
+
+                  // Highlight the selected table
+                  let num = selectedTable.tableNumber;
+
+                  if (tableNumber.tableNumber === num) {
+                    tableDiv.classList.add("border-green-600", "bg-green-100");
+                  } else {
+                    tableDiv.classList.add("border-gray-600");
+                  }
+
+                  tableDiv.innerHTML = `<span class="text-center font-bold">${tableNumber.tableNumber}</span>`;
+                  gridDiv.appendChild(tableDiv);
+                });
+              } else {
+                showErrorAlert(response.data.message);
+              }
+            } catch (error) {
+              console.log(error);
+            }
+          } else {
+            alert("Please enter a table code.");
+          }
+        }
+      });
+    }
+
+    if (btnPlaceOrder) {
+      btnPlaceOrder.addEventListener("click", async (e) => {
+        e.preventDefault();
+
+        if (!bookingCodeDiv.classList.contains("hidden")) {
+          const bookingCodeValue = bookingCodeInput.value.trim();
+
+          try {
+            const response = await axios.post(
+              "/place-order",
+              {
+                bookingCode: bookingCodeValue,
+              },
+              {
+                headers: { "Content-Type": "application/json" },
+              }
+            );
+
+            if (response.data.success) {
+              showSuccessAlert(response.data.message);
+              setTimeout(() => {
+                window.location.replace("/");
+              }, 5000);
+            }
+          } catch (error) {
+            showErrorAlert(error.response.data.message);
+          }
+        }
+
+        if (!tableCodeDiv.classList.contains("hidden")) {
+          const tableCodeValue = tableCodeInput.value.trim();
+          try {
+            const response = await axios.post(
+              "/place-order",
+              {
+                tableCode: tableCodeValue,
+              },
+              {
+                headers: { "Content-Type": "application/json" },
+              }
+            );
+
+            if (response.data.success) {
+              showSuccessAlert(response.data.message);
+              setTimeout(() => {
+                window.location.replace("/");
+              }, 5000);
+            }
+          } catch (error) {
+            showErrorAlert(error.response.data.message);
+          }
+        }
+      });
+    }
+  </script>
+</body>

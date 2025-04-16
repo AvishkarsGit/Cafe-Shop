@@ -9,8 +9,6 @@ router
   .route("/register")
   .get(UserController.getRegister)
   .post(
-    AuthValidator.validateSignup(),
-    GlobalMiddleware.checkError,
     UserController.postRegister
   );
 

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Booking System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .dates {
+      margin-top: 20px;
+    }
+    .date-item {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="switch">
+    <label for="statusToggle">Online Status:</label>
+    <input type="checkbox" id="statusToggle">
+    <span id="statusLabel">Offline</span>
+  </div>
+
+  <div class="dates" id="datesList" style="display: none;"></div>
+
+  <script>
+    const toggle = document.getElementById('statusToggle');
+    const statusLabel = document.getElementById('statusLabel');
+    const datesList = document.getElementById('datesList');
+
+    toggle.addEventListener('change', () => {
+      if (toggle.checked) {
+        statusLabel.textContent = 'Online';
+        showCurrentWeekDates();
+      } else {
+        statusLabel.textContent = 'Offline';
+        datesList.style.display = 'none';
+        datesList.innerHTML = '';
+      }
+    });
+
+    function showCurrentWeekDates() {
+      const today = new Date();
+      const bookingDates = [];
+
+      // Get current day index (0 = Sunday, 6 = Saturday)
+      const currentDay = today.getDay();
+
+      // Calculate days left in current week (till Saturday)
+      const daysRemaining = 6 - currentDay;
+
+      for (let i = 0; i <= daysRemaining; i++) {
+        const date = new Date();
+        date.setDate(today.getDate() + i);
+
+        if (date.getDay() !== 0) { // skip Sundays
+          bookingDates.push(date);
+        }
+      }
+
+      // Display the dates
+      datesList.innerHTML = '<strong>Available Booking Dates (Current Week Only):</strong>';
+      bookingDates.forEach(date => {
+        const item = document.createElement('div');
+        item.className = 'date-item';
+        item.textContent = date.toDateString();
+        datesList.appendChild(item);
+      });
+
+      datesList.style.display = 'block';
+    }
+  </script>
+
+</body>
+</html>

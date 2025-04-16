@@ -38,4 +38,19 @@ router
   .get(HomeController.getProfileEditScreen)
   .post(upload.single("profile"), HomeController.changeProfile);
 
+router.route("/place-order").get(HomeController.getBookingPage);
+router.route("/bookings").get(HomeController.getAdminBooking);
+
+router.route("/add-table").post(HomeController.addTable);
+router.route("/get-table").post(HomeController.getTable);
+
+router
+  .route("/book-table")
+  .get(HomeController.getTableBookingPage)
+  .post(HomeController.bookedTable);
+
+router.route("/place-order").post(HomeController.placeOrder);
+
+router.route("/get-booked-table").post(HomeController.getBookedTable);
+
 module.exports = router;

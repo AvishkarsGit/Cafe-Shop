@@ -9,6 +9,7 @@ const productBtn = document.getElementById("add-product");
 const categoryBtn = document.getElementById("add-category");
 const dashboardDiv = document.querySelector(".dashboard");
 const queriesBtn = document.getElementById("queries");
+const bookingBtn = document.getElementById("bookings");
 
 checkRoutes = () => {
   const currentPath = window.location.pathname;
@@ -50,13 +51,17 @@ checkRoutes = () => {
       productBtn.style.backgroundColor = "rgba(228, 25, 89, 0.847)";
       productBtn.style.color = "white";
       break;
-    case "/category": 
+    case "/category":
       categoryBtn.style.backgroundColor = "rgba(228, 25, 89, 0.847)";
       categoryBtn.style.color = "white";
       break;
     case "/queries":
       queriesBtn.style.backgroundColor = "rgba(228, 25, 89, 0.847)";
       queriesBtn.style.color = "white";
+      break;
+    case "/bookings":
+      bookingBtn.style.backgroundColor = "rgba(228, 25, 89, 0.847)";
+      bookingBtn.style.color = "white";
       break;
     case "/category/create":
       categoryBtn.style.backgroundColor = "rgba(228, 25, 89, 0.847)";
@@ -144,6 +149,13 @@ if (categoryBtn) {
   categoryBtn.addEventListener("click", (e) => {
     e.preventDefault();
     location.assign("/category");
+  });
+}
+
+if (bookingBtn) {
+  bookingBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    location.assign("/bookings");
   });
 }
 

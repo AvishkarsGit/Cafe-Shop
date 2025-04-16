@@ -3,6 +3,13 @@ const cloudinary = require("../config/cloudinary.js");
 const { Category } = require("../models/category.model");
 const Product = require("../models/products.model.js");
 const Cart = require("../models/cart.model.js");
+const { Table } = require("../models/table.model.js");
+const { Booking } = require("../models/booking.model.js");
+const JWT = require("../utils/jwt.js");
+const NodeMailer = require("../utils/NodeMailer.js");
+const { Order } = require("../models/order.model.js");
+const { listenerCount } = require("../models/query.model.js");
+
 class HomeController {
   static getOrders = (req, res) => {
     res.render("users/orders.ejs");
@@ -26,7 +33,6 @@ class HomeController {
         };
         cartItems.push(productWithQuantity);
       }
-
 
       res.render("users/cart.ejs", { cartItems });
     } catch (error) {
@@ -123,6 +129,281 @@ class HomeController {
       res.render("auth/home.ejs", { categories, productsByCategory });
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  static getBookingPage = async (req, res) => {
+    try {
+      res.render("users/booking.ejs");
+    } catch (error) {
+      return res.json({ success: false, message: error.message });
+    }
+  };
+
+  static getAdminBooking = async (req, res) => {
+    try {
+      res.render("users/admin_booking.ejs");
+    } catch (error) {
+      return res.json({ success: false, message: error.message });
+    }
+  };
+
+  static addTable = async (req, res) => {
+    try {
+      const { tableNumber } = req.body;
+
+      const isAssigned = await Table.findOne({ tableNumber });
+
+      if (isAssigned) {
+        return res.json({
+          success: false,
+          message: "This number is already assigned",
+        });
+      }
+
+      const tableData = {
+        tableNumber,
+        tableCode: JWT.generateOTP(),
+        isBooked: false,
+      };
+
+      const table = await new Table(tableData).save();
+
+      if (!table) {
+        throw new Error("failed to adding table");
+      }
+
+      return res.json({
+        success: true,
+        message: "Table added successfully...",
+      });
+    } catch (error) {
+      return res.json({
+        success: false,
+        message: error.message,
+      });
+    }
+  };
+
+  static getTable = async (req, res) => {
+    try {
+      const { tableCode } = req.body;
+
+      const tables = await Table.find().sort({ tableNumber: 1 }); //find all tables
+
+      if (!tables) {
+        return res.json({ success: false, message: "No tables are in cafe" });
+      }
+
+      const selectedTable = await Table.findOne({ tableCode });
+
+      if (!selectedTable) {
+        return res.json({
+          success: false,
+          message: "Table code does not match",
+        });
+      }
+
+      return res.json({
+        success: true,
+        tables,
+        selectedTable,
+      });
+    } catch (error) {
+      return res.json({
+        success: false,
+        message: error.message,
+      });
+    }
+  };
+
+  static getTableBookingPage = async (req, res) => {
+    try {
+      const tables = await Table.find({}).sort({ tableNumber: 1 });
+      if (!tables) {
+        return res.json({
+          success: false,
+          message: "Tables not found",
+        });
+      }
+      res.render("users/book_table.ejs", { tables });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  static bookedTable = async (req, res) => {
+    try {
+      let selectedTables = req.body.selectedTables;
+
+      const userId = req.user._id;
+
+      selectedTables.forEach(async (selectedTable) => {
+        const table = await Table.findOneAndUpdate(
+          { _id: selectedTable },
+          {
+            isBooked: true,
+          },
+          {
+            new: true,
+          }
+        );
+      });
+
+      // get users email
+
+      const user = await User.findOne({ _id: userId });
+
+      //generate booking code
+      let bookingCode = JWT.generateBookingCode();
+
+      // 3. Create a booking document
+      const booking = await Booking.create({
+        userId,
+        tableIds: selectedTables,
+        bookingCode,
+      });
+
+      await NodeMailer.sendBookingEmail(
+        user.email,
+        user.name,
+        bookingCode,
+        "Table Booking Code"
+      );
+
+      return res.json({
+        success: true,
+        message: "Table booked successfully...",
+        sub_message: "we've sent booking code to your email",
+      });
+    } catch (error) {
+      return res.json({ success: false, message: error.message });
+    }
+  };
+
+  static placeOrder = async (req, res) => {
+    try {
+      const userId = req.user._id;
+
+      // check if table is booked or not
+
+      const { tableCode, bookingCode } = req.body;
+
+      // 1) if table code is incoming, then table is not booked.
+      if (tableCode) {
+        //find the table using table code
+        const table = await Table.findOne({ tableCode });
+
+        // place the order
+
+        const cartItems = await Cart.find({ userId });
+
+        let productIds = [];
+
+        let totalPrice = 0;
+
+        cartItems.forEach((item) => {
+          productIds.push(item.productId);
+          totalPrice = totalPrice + item.updatedPrice;
+        });
+
+        const ordersData = {
+          userId,
+          tableIds: table._id,
+          products: productIds,
+          totalPrice,
+        };
+
+        const order = await new Order(ordersData).save();
+
+        await Table.findOneAndUpdate({ tableCode }, { isBooked: true });
+
+        await Cart.deleteMany({ userId });
+
+        return res.json({
+          success: true,
+          message: "Order placed successfully",
+          order,
+        });
+      } else if (bookingCode) {
+        // 2) if booking code is incoming, then table is booked.
+        const bookings = await Booking.find({ userId, bookingCode });
+
+        if (!bookings) {
+          return res.json({ success: false, message: "Booking not found" });
+        }
+
+        let tableIds = [];
+        bookings.forEach((book) => {
+          tableIds.push(...book.tableIds);
+        });
+
+        const cartItems = await Cart.find({ userId });
+
+        let productIds = [];
+
+        let totalPrice = 0;
+
+        cartItems.forEach((item) => {
+          productIds.push(item.productId);
+          totalPrice = totalPrice + item.updatedPrice;
+        });
+
+        const ordersData = {
+          userId,
+          tableIds,
+          products: productIds,
+          totalPrice,
+        };
+
+        await Cart.deleteMany({ userId });
+
+        const order = await new Order(ordersData).save();
+        return res.json({
+          success: true,
+          message: "Order placed successfully",
+          order,
+        });
+      }
+    } catch (error) {
+      return res.json({
+        success: false,
+        message: error.message,
+      });
+    }
+  };
+
+  static getBookedTable = async (req, res) => {
+    try {
+      const userId = req.user._id;
+      const { bookingCode } = req.body;
+
+      const bookings = await Booking.find({ userId, bookingCode });
+      if (!bookings || bookings.length === 0) {
+        return res.json({
+          success: false,
+          message: "Booking not found",
+        });
+      }
+
+      let tables = [];
+
+      for (const booking of bookings) {
+        const tablesData = await Table.find({ _id: { $in: booking.tableIds } });
+        tables.push(...tablesData);
+      }
+
+      console.log(tables);
+
+      return res.json({
+        success: true,
+        tables,
+      });
+    } catch (error) {
+      return res.json({
+        success: false,
+        message: error.message,
+      });
     }
   };
 }

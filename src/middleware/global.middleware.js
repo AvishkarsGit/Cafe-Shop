@@ -101,6 +101,7 @@ class GlobalMiddleware {
     }
     next();
   };
+  
 
   static isUserExist = async (req, res, next) => {
     const id = req.user._id;
